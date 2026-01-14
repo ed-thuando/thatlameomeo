@@ -1,4 +1,4 @@
-import { createClient, Client } from '@libsql/client'
+import { createClient, Client } from '@libsql/client/web'
 
 let client: Client | null = null
 
@@ -22,8 +22,11 @@ export function getDbClient(): Client {
 
   // Use HTTP mode for remote connections (works without native bindings)
   // This is compatible with Turso cloud databases
+  // Force HTTP mode to avoid native binding issues (which cause 502s on Netlify)
+  const url = databaseUrl.replace('libsql://', 'https://')
+
   client = createClient({
-    url: databaseUrl,
+    url: url,
     authToken: authToken,
     // Force HTTP mode for remote connections to avoid native binding issues
     syncUrl: undefined, // No local sync needed for cloud-only setup
