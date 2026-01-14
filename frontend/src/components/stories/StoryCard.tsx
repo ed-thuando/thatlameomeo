@@ -63,36 +63,107 @@ function StoryCard({
     })
   }
 
+  const formatTimeAgo = (dateString: string) => {
+    const date = new Date(dateString)
+    const now = new Date()
+    const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000)
+
+    if (diffInSeconds < 60) return `${diffInSeconds}s`
+    if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)}m`
+    if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)}h`
+    if (diffInSeconds < 604800) return `${Math.floor(diffInSeconds / 86400)}d`
+    return formatDate(dateString)
+  }
+
   return (
     <div
       style={{
-        border: '1px solid #ddd',
-        borderRadius: '8px',
+        backgroundColor: 'var(--card-bg, #1a1a1a)',
+        border: '1px solid var(--border-color, #262626)',
+        borderRadius: '12px',
         padding: '16px',
-        marginBottom: '16px',
+        marginBottom: '12px',
         cursor: 'pointer',
+        transition: 'background-color 0.2s',
       }}
       onClick={handleStoryClick}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.backgroundColor = 'var(--card-hover-bg, #1f1f1f)'
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.backgroundColor = 'var(--card-bg, #1a1a1a)'
+      }}
     >
-      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
-        <div>
-          <strong>{story.username || 'Unknown User'}</strong>
-          {story.daily_meomeo_score !== undefined && (
-            <span style={{ marginLeft: '8px', color: '#666' }}>
-              🐱 {story.daily_meomeo_score} MeoMeo
-            </span>
-          )}
+      <div style={{ display: 'flex', gap: '12px', marginBottom: '12px' }}>
+        <div
+          style={{
+            width: '40px',
+            height: '40px',
+            borderRadius: '50%',
+            backgroundColor: 'var(--avatar-bg, #333)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            flexShrink: 0,
+            fontSize: '20px',
+          }}
+        >
+          {story.username?.[0]?.toUpperCase() || '?'}
         </div>
-        <span style={{ color: '#666', fontSize: '0.9em' }}>
-          {formatDate(story.created_at)}
-        </span>
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+            <strong style={{ color: 'var(--text-color, #ffffff)', fontSize: '14px' }}>
+              {story.username || 'Unknown User'}
+            </strong>
+            {story.daily_meomeo_score !== undefined && (
+              <span style={{ color: 'var(--secondary-text, #a8a8a8)', fontSize: '12px' }}>
+                🐱 {story.daily_meomeo_score}
+              </span>
+            )}
+            <span style={{ color: 'var(--secondary-text, #a8a8a8)', fontSize: '12px' }}>
+              · {formatTimeAgo(story.created_at)}
+            </span>
+          </div>
+        </div>
+        <button
+          onClick={(e) => {
+            e.stopPropagation()
+            // Handle menu
+          }}
+          style={{
+            background: 'none',
+            border: 'none',
+            color: 'var(--secondary-text, #a8a8a8)',
+            cursor: 'pointer',
+            padding: '4px',
+            fontSize: '18px',
+          }}
+        >
+          ⋯
+        </button>
       </div>
 
-      <div style={{ marginBottom: '12px', whiteSpace: 'pre-wrap' }}>{story.content}</div>
+      <div
+        style={{
+          marginBottom: '12px',
+          whiteSpace: 'pre-wrap',
+          color: 'var(--text-color, #ffffff)',
+          fontSize: '14px',
+          lineHeight: '1.5',
+        }}
+      >
+        {story.content}
+      </div>
 
       {showActions && (
         <div
-          style={{ display: 'flex', gap: '16px', alignItems: 'center' }}
+          style={{
+            display: 'flex',
+            gap: '24px',
+            alignItems: 'center',
+            paddingTop: '8px',
+            borderTop: '1px solid var(--border-color, #262626)',
+          }}
           onClick={(e) => e.stopPropagation()}
         >
           <LikeButton storyId={story.id} likeCount={story.like_count || 0} onLike={onRefresh} />
@@ -108,11 +179,28 @@ function StoryCard({
 
       {isOwner && (onArchive || onDelete) && (
         <div
-          style={{ marginTop: '12px', display: 'flex', gap: '8px' }}
+          style={{
+            marginTop: '12px',
+            display: 'flex',
+            gap: '8px',
+            paddingTop: '8px',
+            borderTop: '1px solid var(--border-color, #262626)',
+          }}
           onClick={(e) => e.stopPropagation()}
         >
           {onArchive && (
-            <button onClick={handleArchive} style={{ fontSize: '0.9em' }}>
+            <button
+              onClick={handleArchive}
+              style={{
+                fontSize: '12px',
+                background: 'none',
+                border: '1px solid var(--border-color, #262626)',
+                color: 'var(--text-color, #ffffff)',
+                padding: '4px 12px',
+                borderRadius: '6px',
+                cursor: 'pointer',
+              }}
+            >
               Archive
             </button>
           )}
@@ -120,13 +208,48 @@ function StoryCard({
             <>
               {showDeleteConfirm ? (
                 <>
-                  <button onClick={handleDelete} style={{ color: 'red' }}>
+                  <button
+                    onClick={handleDelete}
+                    style={{
+                      fontSize: '12px',
+                      background: 'none',
+                      border: '1px solid #ff4444',
+                      color: '#ff4444',
+                      padding: '4px 12px',
+                      borderRadius: '6px',
+                      cursor: 'pointer',
+                    }}
+                  >
                     Confirm Delete
                   </button>
-                  <button onClick={() => setShowDeleteConfirm(false)}>Cancel</button>
+                  <button
+                    onClick={() => setShowDeleteConfirm(false)}
+                    style={{
+                      fontSize: '12px',
+                      background: 'none',
+                      border: '1px solid var(--border-color, #262626)',
+                      color: 'var(--text-color, #ffffff)',
+                      padding: '4px 12px',
+                      borderRadius: '6px',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    Cancel
+                  </button>
                 </>
               ) : (
-                <button onClick={() => setShowDeleteConfirm(true)} style={{ color: 'red' }}>
+                <button
+                  onClick={() => setShowDeleteConfirm(true)}
+                  style={{
+                    fontSize: '12px',
+                    background: 'none',
+                    border: '1px solid #ff4444',
+                    color: '#ff4444',
+                    padding: '4px 12px',
+                    borderRadius: '6px',
+                    cursor: 'pointer',
+                  }}
+                >
                   Delete
                 </button>
               )}

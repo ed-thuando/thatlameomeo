@@ -92,7 +92,6 @@ function StoryFeed({ refreshKey, onArchive, onDelete }: StoryFeedProps) {
 
   return (
     <div>
-      <h2>Public Stories</h2>
       {stories.map((story) => (
         <StoryCard
           key={story.id}
@@ -103,9 +102,24 @@ function StoryFeed({ refreshKey, onArchive, onDelete }: StoryFeedProps) {
         />
       ))}
       {hasMore && (
-        <button onClick={() => fetchStories(false)} disabled={isLoading}>
-          {isLoading ? 'Loading...' : 'Load More'}
-        </button>
+        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '16px' }}>
+          <button
+            onClick={() => fetchStories(false)}
+            disabled={isLoading}
+            style={{
+              backgroundColor: 'var(--card-bg, #1a1a1a)',
+              border: '1px solid var(--border-color, #262626)',
+              color: 'var(--text-color, #ffffff)',
+              padding: '12px 24px',
+              borderRadius: '8px',
+              cursor: isLoading ? 'not-allowed' : 'pointer',
+              fontSize: '14px',
+              fontWeight: 600,
+            }}
+          >
+            {isLoading ? 'Loading...' : 'Load More'}
+          </button>
+        </div>
       )}
     </div>
   )

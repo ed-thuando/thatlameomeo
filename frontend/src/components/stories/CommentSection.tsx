@@ -105,11 +105,21 @@ function CommentSection({
             cursor: 'pointer',
             display: 'flex',
             alignItems: 'center',
-            gap: '4px',
+            gap: '6px',
+            padding: '4px 8px',
+            borderRadius: '8px',
+            color: 'var(--secondary-text, #a8a8a8)',
+            transition: 'background-color 0.2s',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.backgroundColor = 'var(--button-hover-bg, #1f1f1f)'
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.backgroundColor = 'transparent'
           }}
         >
-          <span>💬</span>
-          <span>{commentCount}</span>
+          <span style={{ fontSize: '20px' }}>💬</span>
+          <span style={{ fontSize: '14px' }}>{commentCount > 0 ? commentCount : ''}</span>
         </button>
       </div>
     )

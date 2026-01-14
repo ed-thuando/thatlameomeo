@@ -73,14 +73,27 @@ function LikeButton({ storyId, likeCount: initialLikeCount, onLike }: LikeButton
         background: 'none',
         border: 'none',
         cursor: isAuthenticated ? 'pointer' : 'not-allowed',
-        color: isLiked ? 'red' : 'gray',
+        color: isLiked ? '#ff3040' : 'var(--secondary-text, #a8a8a8)',
         display: 'flex',
         alignItems: 'center',
-        gap: '4px',
+        gap: '6px',
+        padding: '4px 8px',
+        borderRadius: '8px',
+        transition: 'background-color 0.2s',
+      }}
+      onMouseEnter={(e) => {
+        if (isAuthenticated) {
+          e.currentTarget.style.backgroundColor = 'var(--button-hover-bg, #1f1f1f)'
+        }
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.backgroundColor = 'transparent'
       }}
     >
-      <span>{isLiked ? '❤️' : '🤍'}</span>
-      <span>{likeCount}</span>
+      <span style={{ fontSize: '20px' }}>{isLiked ? '❤️' : '🤍'}</span>
+      <span style={{ fontSize: '14px', color: 'var(--secondary-text, #a8a8a8)' }}>
+        {likeCount > 0 ? likeCount : ''}
+      </span>
     </button>
   )
 }

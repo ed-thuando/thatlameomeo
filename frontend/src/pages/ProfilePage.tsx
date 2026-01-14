@@ -6,6 +6,7 @@ import AvatarEditor from '../components/users/AvatarEditor'
 import DisplayNameEditor from '../components/users/DisplayNameEditor'
 import StoryCard from '../components/stories/StoryCard'
 import Header from '../components/layout/Header'
+import Sidebar from '../components/layout/Sidebar'
 
 interface Story {
   id: number
@@ -105,73 +106,131 @@ function ProfilePage() {
 
   if (error && !profile) {
     return (
-      <div>
-        <Header />
-        <div style={{ color: 'red' }}>{error}</div>
+      <div style={{ display: 'flex', minHeight: '100vh', backgroundColor: 'var(--background-color, #000000)' }}>
+        <Sidebar />
+        <div style={{ marginLeft: '72px', width: '100%' }}>
+          <Header />
+          <div style={{ marginTop: '60px', padding: '24px', color: '#ff4444' }}>{error}</div>
+        </div>
       </div>
     )
   }
 
   return (
-    <div>
-      <Header />
-      <h1>Profile</h1>
-
-      {profile && (
-        <div style={{ marginBottom: '24px' }}>
-          {profile.avatar_url && (
-            <img
-              src={profile.avatar_url}
-              alt="Avatar"
-              style={{ width: '96px', height: '96px', borderRadius: '50%', marginBottom: '12px' }}
+    <div style={{ display: 'flex', minHeight: '100vh', backgroundColor: 'var(--background-color, #000000)' }}>
+      <Sidebar />
+      <div style={{ marginLeft: '72px', width: '100%' }}>
+        <Header />
+        <div
+          style={{
+            marginTop: '60px',
+            display: 'grid',
+            gridTemplateColumns: '1fr 600px 1fr',
+            gap: '24px',
+            padding: '24px',
+            maxWidth: '1200px',
+            marginLeft: 'auto',
+            marginRight: 'auto',
+          }}
+        >
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            {profile && (
+              <div
+                style={{
+                  backgroundColor: 'var(--card-bg, #1a1a1a)',
+                  border: '1px solid var(--border-color, #262626)',
+                  borderRadius: '12px',
+                  padding: '24px',
+                }}
+              >
+                {profile.avatar_url ? (
+                  <img
+                    src={profile.avatar_url}
+                    alt="Avatar"
+                    style={{
+                      width: '96px',
+                      height: '96px',
+                      borderRadius: '50%',
+                      marginBottom: '12px',
+                    }}
+                  />
+                ) : (
+                  <div
+                    style={{
+                      width: '96px',
+                      height: '96px',
+                      borderRadius: '50%',
+                      backgroundColor: 'var(--avatar-bg, #333)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: '36px',
+                      marginBottom: '12px',
+                    }}
+                  >
+                    {profile.username?.[0]?.toUpperCase() || '?'}
+                  </div>
+                )}
+                <h2 style={{ margin: '0 0 8px 0', color: 'var(--text-color, #ffffff)' }}>
+                  {profile.display_name || profile.username}
+                </h2>
+                <p style={{ margin: '0 0 12px 0', color: 'var(--secondary-text, #a8a8a8)' }}>
+                  @{profile.username}
+                </p>
+                {dailyScore !== null && (
+                  <p style={{ margin: 0, color: 'var(--text-color, #ffffff)' }}>
+                    <strong>Daily MeoMeo Score: 🐱 {dailyScore}</strong>
+                  </p>
+                )}
+              </div>
+            )}
+            <AvatarEditor
+              currentAvatarUrl={profile?.avatar_url}
+              onAvatarUpdated={handleAvatarUpdated}
             />
-          )}
-          <h2>{profile.display_name || profile.username}</h2>
-          <p>@{profile.username}</p>
-          {dailyScore !== null && (
-            <p>
-              <strong>Daily MeoMeo Score: 🐱 {dailyScore}</strong>
-            </p>
-          )}
-        </div>
-      )}
-
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '24px' }}>
-        <div>
-          <AvatarEditor
-            currentAvatarUrl={profile?.avatar_url}
-            onAvatarUpdated={handleAvatarUpdated}
-          />
-          <div style={{ marginTop: '24px' }}>
             <DisplayNameEditor
               currentDisplayName={profile?.display_name}
               onDisplayNameUpdated={handleDisplayNameUpdated}
             />
           </div>
-        </div>
 
-        <div>
-          <h3>My Stories</h3>
-          {isLoading ? (
-            <div>Loading stories...</div>
-          ) : stories.length === 0 ? (
-            <div>No stories yet. Create your first story!</div>
-          ) : (
-            <div>
-              {stories.map((story) => (
-                <StoryCard
-                  key={story.id}
-                  story={{
-                    ...story,
-                    username: profile?.display_name || profile?.username,
-                  }}
-                  showActions={false}
-                  onArchive={handleArchive}
-                  onDelete={handleDelete}
-                />
-              ))}
-            </div>
-          )}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            {isLoading ? (
+              <div style={{ color: 'var(--text-color, #ffffff)' }}>Loading stories...</div>
+            ) : stories.length === 0 ? (
+              <div
+                style={{
+                  backgroundColor: 'var(--card-bg, #1a1a1a)',
+                  border: '1px solid var(--border-color, #262626)',
+                  borderRadius: '12px',
+                  padding: '24px',
+                  textAlign: 'center',
+                  color: 'var(--secondary-text, #a8a8a8)',
+                }}
+              >
+                No stories yet. Create your first story!
+              </div>
+            ) : (
+              <div>
+                {stories.map((story) => (
+                  <StoryCard
+                    key={story.id}
+                    story={{
+                      ...story,
+                      username: profile?.display_name || profile?.username,
+                    }}
+                    showActions={false}
+                    onArchive={handleArchive}
+                    onDelete={handleDelete}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            {/* Right sidebar content */}
+          </div>
         </div>
       </div>
     </div>

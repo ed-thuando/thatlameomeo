@@ -5,6 +5,7 @@ import { useAuth } from '../hooks/useAuth'
 import StoryDetail from '../components/stories/StoryDetail'
 import CommentSection from '../components/stories/CommentSection'
 import Header from '../components/layout/Header'
+import Sidebar from '../components/layout/Sidebar'
 
 interface Story {
   id: number
@@ -62,42 +63,121 @@ function PostDetailPage() {
 
   if (isLoading) {
     return (
-      <div>
-        <Header />
-        <div>Loading story...</div>
+      <div style={{ display: 'flex', minHeight: '100vh', backgroundColor: 'var(--background-color, #000000)' }}>
+        <Sidebar />
+        <div style={{ marginLeft: '72px', width: '100%' }}>
+          <Header />
+          <div style={{ marginTop: '60px', padding: '24px', color: 'var(--text-color, #ffffff)' }}>
+            Loading story...
+          </div>
+        </div>
       </div>
     )
   }
 
   if (error || !story) {
     return (
-      <div>
-        <Header />
-        <div style={{ color: 'red' }}>{error || 'Story not found'}</div>
-        <button onClick={() => navigate('/')}>Go Home</button>
+      <div style={{ display: 'flex', minHeight: '100vh', backgroundColor: 'var(--background-color, #000000)' }}>
+        <Sidebar />
+        <div style={{ marginLeft: '72px', width: '100%' }}>
+          <Header />
+          <div
+            style={{
+              marginTop: '60px',
+              padding: '24px',
+              color: '#ff4444',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '16px',
+            }}
+          >
+            <div>{error || 'Story not found'}</div>
+            <button
+              onClick={() => navigate('/')}
+              style={{
+                backgroundColor: 'var(--card-bg, #1a1a1a)',
+                border: '1px solid var(--border-color, #262626)',
+                color: 'var(--text-color, #ffffff)',
+                padding: '12px 24px',
+                borderRadius: '8px',
+                cursor: 'pointer',
+                fontSize: '14px',
+                fontWeight: 600,
+                maxWidth: '200px',
+              }}
+            >
+              Go Home
+            </button>
+          </div>
+        </div>
       </div>
     )
   }
 
   return (
-    <div>
-      <Header />
-      <div style={{ maxWidth: '800px', margin: '0 auto' }}>
-        <StoryDetail story={story} />
-        <div style={{ marginTop: '24px' }}>
-          <CommentSection
-            storyId={story.id}
-            commentCount={story.comment_count}
-            compact={false}
-            onComment={handleRefresh}
-          />
-        </div>
-        {!isAuthenticated && (
-          <div style={{ marginTop: '16px', padding: '12px', backgroundColor: '#f0f0f0' }}>
-            <p>You must be logged in to like or comment on posts.</p>
-            <button onClick={() => navigate('/login')}>Login</button>
+    <div style={{ display: 'flex', minHeight: '100vh', backgroundColor: 'var(--background-color, #000000)' }}>
+      <Sidebar />
+      <div style={{ marginLeft: '72px', width: '100%' }}>
+        <Header />
+        <div
+          style={{
+            marginTop: '60px',
+            display: 'grid',
+            gridTemplateColumns: '1fr 600px 1fr',
+            gap: '24px',
+            padding: '24px',
+            maxWidth: '1200px',
+            marginLeft: 'auto',
+            marginRight: 'auto',
+          }}
+        >
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            {/* Left sidebar content */}
           </div>
-        )}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            <StoryDetail story={story} />
+            <div style={{ marginTop: '8px' }}>
+              <CommentSection
+                storyId={story.id}
+                commentCount={story.comment_count}
+                compact={false}
+                onComment={handleRefresh}
+              />
+            </div>
+            {!isAuthenticated && (
+              <div
+                style={{
+                  marginTop: '16px',
+                  padding: '16px',
+                  backgroundColor: 'var(--card-bg, #1a1a1a)',
+                  border: '1px solid var(--border-color, #262626)',
+                  borderRadius: '12px',
+                  color: 'var(--text-color, #ffffff)',
+                }}
+              >
+                <p style={{ margin: '0 0 12px 0' }}>You must be logged in to like or comment on posts.</p>
+                <button
+                  onClick={() => navigate('/login')}
+                  style={{
+                    backgroundColor: 'var(--primary-color, #ffffff)',
+                    color: '#000000',
+                    border: 'none',
+                    padding: '8px 16px',
+                    borderRadius: '8px',
+                    cursor: 'pointer',
+                    fontSize: '14px',
+                    fontWeight: 600,
+                  }}
+                >
+                  Login
+                </button>
+              </div>
+            )}
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            {/* Right sidebar content */}
+          </div>
+        </div>
       </div>
     </div>
   )

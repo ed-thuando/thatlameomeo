@@ -1,46 +1,70 @@
-import { Link, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../hooks/useAuth'
-import ThemeSelector from '../theme/ThemeSelector'
 
 function Header() {
-  const { isAuthenticated, logout } = useAuth()
+  const { isAuthenticated, logout, user } = useAuth()
   const navigate = useNavigate()
+  const location = useLocation()
 
-  const handleHomeClick = () => {
-    navigate('/')
+  const getPageTitle = () => {
+    if (location.pathname === '/') return 'Home'
+    if (location.pathname.startsWith('/profile')) return 'Profile'
+    if (location.pathname.startsWith('/post/')) return 'Thread'
+    if (location.pathname === '/search') return 'Search'
+    if (location.pathname === '/create') return 'Create'
+    if (location.pathname === '/activity') return 'Activity'
+    if (location.pathname === '/saved') return 'Saved'
+    return 'Home'
+  }
+
+  if (!isAuthenticated) {
+    return null
   }
 
   return (
     <header
       style={{
+        position: 'fixed',
+        top: 0,
+        left: '72px',
+        right: 0,
+        height: '60px',
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-        padding: '16px',
-        borderBottom: '1px solid #ddd',
-        marginBottom: '16px',
+        padding: '0 24px',
+        backgroundColor: 'var(--header-bg, #000000)',
+        borderBottom: '1px solid var(--border-color, #262626)',
+        zIndex: 999,
       }}
     >
-      <div
-        style={{ display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer' }}
-        onClick={handleHomeClick}
+      <h1
+        style={{
+          margin: 0,
+          fontSize: '24px',
+          fontWeight: 600,
+          color: 'var(--text-color, #ffffff)',
+        }}
       >
-        <img
-          src="/sad-cat-logo.svg"
-          alt="Sad Cat Logo"
-          style={{ width: '32px', height: '32px' }}
-        />
-        <h1 style={{ margin: 0 }}>Thatlameomeo</h1>
-      </div>
+        {getPageTitle()}
+      </h1>
 
-      {isAuthenticated && (
-        <nav style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
-          <ThemeSelector />
-          <Link to="/">Home</Link>
-          <Link to="/profile">Profile</Link>
-          <button onClick={logout}>Logout</button>
-        </nav>
-      )}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+        <button
+          onClick={logout}
+          style={{
+            background: 'none',
+            border: '1px solid var(--border-color, #262626)',
+            color: 'var(--text-color, #ffffff)',
+            padding: '8px 16px',
+            borderRadius: '8px',
+            cursor: 'pointer',
+            fontSize: '14px',
+          }}
+        >
+          Logout
+        </button>
+      </div>
     </header>
   )
 }

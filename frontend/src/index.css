@@ -1,9 +1,18 @@
 :root {
-  --primary-color: #007bff;
+  --primary-color: #ffffff;
   --secondary-color: #6c757d;
-  --background-color: #ffffff;
-  --text-color: #212529;
-  --border-color: #dee2e6;
+  --background-color: #000000;
+  --text-color: #ffffff;
+  --border-color: #262626;
+  --sidebar-bg: #000000;
+  --sidebar-active-bg: #1a1a1a;
+  --header-bg: #000000;
+  --card-bg: #1a1a1a;
+  --card-hover-bg: #1f1f1f;
+  --button-hover-bg: #1f1f1f;
+  --button-disabled-bg: #333;
+  --secondary-text: #a8a8a8;
+  --avatar-bg: #333;
 }
 
 * {
@@ -21,6 +30,8 @@ body {
   background-color: var(--background-color);
   color: var(--text-color);
   line-height: 1.6;
+  margin: 0;
+  padding: 0;
 }
 
 code {

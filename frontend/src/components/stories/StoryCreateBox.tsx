@@ -74,54 +74,145 @@ function StoryCreateBox({ onStoryCreated }: StoryCreateBoxProps) {
   }
 
   return (
-    <div>
-      <h2>Create Story</h2>
+    <div
+      style={{
+        backgroundColor: 'var(--card-bg, #1a1a1a)',
+        border: '1px solid var(--border-color, #262626)',
+        borderRadius: '12px',
+        padding: '16px',
+        marginBottom: '16px',
+      }}
+    >
       <form onSubmit={handleSubmit}>
-        {error && <div style={{ color: 'red' }}>{error}</div>}
-        {success && (
-          <div style={{ color: 'green' }}>Story created successfully!</div>
+        {error && (
+          <div
+            style={{
+              color: '#ff4444',
+              fontSize: '14px',
+              marginBottom: '12px',
+              padding: '8px',
+              backgroundColor: 'rgba(255, 68, 68, 0.1)',
+              borderRadius: '8px',
+            }}
+          >
+            {error}
+          </div>
         )}
-        <div>
-          <label htmlFor="content">What's on your mind?</label>
+        {success && (
+          <div
+            style={{
+              color: '#4caf50',
+              fontSize: '14px',
+              marginBottom: '12px',
+              padding: '8px',
+              backgroundColor: 'rgba(76, 175, 80, 0.1)',
+              borderRadius: '8px',
+            }}
+          >
+            Story created successfully!
+          </div>
+        )}
+        <div style={{ marginBottom: '12px' }}>
           <textarea
             id="content"
             value={content}
             onChange={(e) => setContent(e.target.value)}
             disabled={isLoading}
-            rows={5}
+            rows={4}
             maxLength={MAX_CONTENT_LENGTH}
             required
-            style={{ width: '100%' }}
+            placeholder="Start a thread..."
+            style={{
+              width: '100%',
+              backgroundColor: 'transparent',
+              border: 'none',
+              color: 'var(--text-color, #ffffff)',
+              fontSize: '16px',
+              fontFamily: 'inherit',
+              resize: 'none',
+              outline: 'none',
+            }}
           />
-          <div>
-            {content.length} / {MAX_CONTENT_LENGTH} characters
+        </div>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            paddingTop: '12px',
+            borderTop: '1px solid var(--border-color, #262626)',
+          }}
+        >
+          <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
+            <label
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                cursor: 'pointer',
+                fontSize: '14px',
+                color: 'var(--text-color, #ffffff)',
+              }}
+            >
+              <input
+                type="radio"
+                value="public"
+                checked={visibility === 'public'}
+                onChange={(e) => setVisibility(e.target.value as 'public' | 'private')}
+                disabled={isLoading}
+                style={{ cursor: 'pointer' }}
+              />
+              Public
+            </label>
+            <label
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                cursor: 'pointer',
+                fontSize: '14px',
+                color: 'var(--text-color, #ffffff)',
+              }}
+            >
+              <input
+                type="radio"
+                value="private"
+                checked={visibility === 'private'}
+                onChange={(e) => setVisibility(e.target.value as 'public' | 'private')}
+                disabled={isLoading}
+                style={{ cursor: 'pointer' }}
+              />
+              Private
+            </label>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <span
+              style={{
+                fontSize: '12px',
+                color: 'var(--secondary-text, #a8a8a8)',
+              }}
+            >
+              {content.length} / {MAX_CONTENT_LENGTH}
+            </span>
+            <button
+              type="submit"
+              disabled={isLoading || !content.trim()}
+              style={{
+                backgroundColor: content.trim() ? 'var(--primary-color, #ffffff)' : 'var(--button-disabled-bg, #333)',
+                color: content.trim() ? '#000000' : 'var(--secondary-text, #666)',
+                border: 'none',
+                padding: '8px 16px',
+                borderRadius: '8px',
+                cursor: content.trim() && !isLoading ? 'pointer' : 'not-allowed',
+                fontSize: '14px',
+                fontWeight: 600,
+                transition: 'opacity 0.2s',
+              }}
+            >
+              {isLoading ? 'Posting...' : 'Post'}
+            </button>
           </div>
         </div>
-        <div>
-          <label>
-            <input
-              type="radio"
-              value="public"
-              checked={visibility === 'public'}
-              onChange={(e) => setVisibility(e.target.value as 'public' | 'private')}
-              disabled={isLoading}
-            />
-            Public
-          </label>
-          <label>
-            <input
-              type="radio"
-              value="private"
-              checked={visibility === 'private'}
-              onChange={(e) => setVisibility(e.target.value as 'public' | 'private')}
-              disabled={isLoading}
-            />
-            Private
-          </label>
-        </div>
-        <button type="submit" disabled={isLoading || !content.trim()}>
-          {isLoading ? 'Creating...' : 'Share Story'}
-        </button>
       </form>
     </div>
   )

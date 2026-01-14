@@ -51,14 +51,26 @@ function ShareButton({ storyId }: ShareButtonProps) {
           cursor: 'pointer',
           display: 'flex',
           alignItems: 'center',
-          gap: '4px',
+          gap: '6px',
+          padding: '4px 8px',
+          borderRadius: '8px',
+          color: 'var(--secondary-text, #a8a8a8)',
+          transition: 'background-color 0.2s',
+        }}
+        onMouseEnter={(e) => {
+          if (!isLoading) {
+            e.currentTarget.style.backgroundColor = 'var(--button-hover-bg, #1f1f1f)'
+          }
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.backgroundColor = 'transparent'
         }}
       >
-        <span>🔗</span>
-        <span>{copied ? 'Copied!' : 'Share'}</span>
+        <span style={{ fontSize: '20px' }}>🔗</span>
+        <span style={{ fontSize: '14px' }}>{copied ? 'Copied!' : ''}</span>
       </button>
       {shareUrl && (
-        <div style={{ marginTop: '4px', fontSize: '0.9em', color: '#666' }}>
+        <div style={{ marginTop: '4px', fontSize: '12px', color: 'var(--secondary-text, #a8a8a8)' }}>
           {shareUrl}
         </div>
       )}

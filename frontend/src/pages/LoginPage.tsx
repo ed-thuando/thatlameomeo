@@ -28,14 +28,39 @@ function LoginPage() {
   }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '24px' }}>
-      <img
-        src="/sad-cat-logo.svg"
-        alt="Sad Cat Logo"
-        style={{ width: '64px', height: '64px', marginBottom: '16px' }}
-      />
-      <h1>Thatlameomeo</h1>
-      <LoginForm onSubmit={handleLogin} error={error} isLoading={isLoading} />
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        minHeight: '100vh',
+        backgroundColor: 'var(--background-color, #000000)',
+        padding: '24px',
+      }}
+    >
+      <div
+        style={{
+          backgroundColor: 'var(--card-bg, #1a1a1a)',
+          border: '1px solid var(--border-color, #262626)',
+          borderRadius: '12px',
+          padding: '32px',
+          maxWidth: '400px',
+          width: '100%',
+        }}
+      >
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '24px' }}>
+          <img
+            src="/sad-cat-logo.svg"
+            alt="Sad Cat Logo"
+            style={{ width: '64px', height: '64px', marginBottom: '16px' }}
+          />
+          <h1 style={{ margin: 0, color: 'var(--text-color, #ffffff)', fontSize: '28px' }}>
+            Thatlameomeo
+          </h1>
+        </div>
+        <LoginForm onSubmit={handleLogin} error={error} isLoading={isLoading} />
+      </div>
     </div>
   )
 }
