@@ -51,9 +51,9 @@ function LoginPage() {
       >
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '24px' }}>
           <img
-            src="/sad-cat-logo.svg"
-            alt="Sad Cat Logo"
-            style={{ width: '64px', height: '64px', marginBottom: '16px' }}
+            src="/icon.jpg"
+            alt="App Icon"
+            style={{ width: '64px', height: '64px', marginBottom: '16px', borderRadius: '50%' }}
           />
           <h1 style={{ margin: 0, color: '#ffffff', fontSize: '28px', fontWeight: 600 }}>
             Thatlameomeo

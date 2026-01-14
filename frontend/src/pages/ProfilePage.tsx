@@ -156,21 +156,17 @@ function ProfilePage() {
                     }}
                   />
                 ) : (
-                  <div
+                  <img
+                    src="/icon-line-light.png"
+                    alt={profile.username || 'User'}
                     style={{
                       width: '96px',
                       height: '96px',
                       borderRadius: '50%',
-                      backgroundColor: 'var(--avatar-bg, #333)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      fontSize: '36px',
                       marginBottom: '12px',
+                      objectFit: 'cover',
                     }}
-                  >
-                    {profile.username?.[0]?.toUpperCase() || '?'}
-                  </div>
+                  />
                 )}
                 <h2 style={{ margin: '0 0 8px 0', color: 'var(--text-color, #ffffff)' }}>
                   {profile.display_name || profile.username}

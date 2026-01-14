@@ -11,19 +11,14 @@ interface UsersResponse {
   users: User[]
 }
 
-interface UserListProps {
-  sortBy?: 'meomeo_score' | 'username'
-  order?: 'asc' | 'desc'
-}
-
-function UserList({ sortBy = 'meomeo_score', order = 'desc' }: UserListProps) {
+function UserList() {
   const [users, setUsers] = useState<User[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     fetchUsers()
-  }, [sortBy, order])
+  }, [])
 
   const fetchUsers = async () => {
     setIsLoading(true)
@@ -31,7 +26,7 @@ function UserList({ sortBy = 'meomeo_score', order = 'desc' }: UserListProps) {
 
     try {
       const response = await apiGet<UsersResponse>(
-        `/users?sort=${sortBy}&order=${order}`
+        `/users?sort=meomeo_score&order=desc`
       )
       setUsers(response.users)
     } catch (err) {
@@ -100,60 +95,41 @@ function UserList({ sortBy = 'meomeo_score', order = 'desc' }: UserListProps) {
         padding: '16px',
       }}
     >
-      <h3 style={{ margin: '0 0 16px 0', color: 'var(--text-color, #ffffff)', fontSize: '18px' }}>
+      <h3 style={{ margin: '0 0 20px 0', color: '#ffffff', fontSize: '18px', fontWeight: 600 }}>
         Users - Daily MeoMeo Scores
       </h3>
-      <div style={{ display: 'flex', gap: '8px', marginBottom: '12px' }}>
-        <button
-          onClick={() => fetchUsers()}
-          style={{
-            backgroundColor: 'var(--card-bg, #1a1a1a)',
-            border: '1px solid var(--border-color, #262626)',
-            color: 'var(--text-color, #ffffff)',
-            padding: '6px 12px',
-            borderRadius: '6px',
-            cursor: 'pointer',
-            fontSize: '12px',
-          }}
-        >
-          Sort by Score
-        </button>
-        <button
-          onClick={() => fetchUsers()}
-          style={{
-            backgroundColor: 'var(--card-bg, #1a1a1a)',
-            border: '1px solid var(--border-color, #262626)',
-            color: 'var(--text-color, #ffffff)',
-            padding: '6px 12px',
-            borderRadius: '6px',
-            cursor: 'pointer',
-            fontSize: '12px',
-          }}
-        >
-          Sort by Name
-        </button>
-      </div>
       <div>
-        {users.map((user) => (
+        {users.map((user, index) => (
           <div
             key={user.id}
             style={{
-              padding: '12px',
-              marginBottom: '8px',
-              border: '1px solid var(--border-color, #262626)',
-              borderRadius: '8px',
+              padding: '12px 0',
+              borderBottom: index < users.length - 1 ? '1px solid #262626' : 'none',
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'center',
-              backgroundColor: 'var(--background-color, #000000)',
             }}
           >
-            <span style={{ color: 'var(--text-color, #ffffff)', fontSize: '14px' }}>
-              {user.username}
-            </span>
-            <span style={{ color: 'var(--secondary-text, #a8a8a8)', fontSize: '14px' }}>
-              🐱 {user.daily_meomeo_score} MeoMeo
-            </span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flex: 1 }}>
+              <img
+                src="/icon-line-light.png"
+                alt={user.username}
+                style={{
+                  width: '32px',
+                  height: '32px',
+                  borderRadius: '50%',
+                  objectFit: 'cover',
+                }}
+              />
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                <span style={{ color: '#ffffff', fontSize: '14px', fontWeight: 500 }}>
+                  {user.username}
+                </span>
+                <span style={{ color: '#a8a8a8', fontSize: '12px' }}>
+                  🐱 {user.daily_meomeo_score} MeoMeo
+                </span>
+              </div>
+            </div>
           </div>
         ))}
       </div>

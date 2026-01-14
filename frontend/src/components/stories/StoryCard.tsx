@@ -95,21 +95,17 @@ function StoryCard({
       }}
     >
       <div style={{ display: 'flex', gap: '12px', marginBottom: '12px' }}>
-        <div
+        <img
+          src="/icon-line-light.png"
+          alt={story.username || 'User'}
           style={{
             width: '40px',
             height: '40px',
             borderRadius: '50%',
-            backgroundColor: 'var(--avatar-bg, #333)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
             flexShrink: 0,
-            fontSize: '20px',
+            objectFit: 'cover',
           }}
-        >
-          {story.username?.[0]?.toUpperCase() || '?'}
-        </div>
+        />
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
             <strong style={{ color: '#ffffff', fontSize: '14px' }}>

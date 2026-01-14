@@ -107,9 +107,9 @@ function Sidebar() {
         }}
       >
         <img
-          src="/sad-cat-logo.svg"
+          src="/icon.jpg"
           alt="Logo"
-          style={{ width: '32px', height: '32px' }}
+          style={{ width: '32px', height: '32px', borderRadius: '50%' }}
         />
       </Link>
 
