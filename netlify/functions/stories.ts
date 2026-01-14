@@ -158,20 +158,44 @@ async function handleGetPublicStories(
 
   try {
     // Get public stories (exclude archived)
-    const storiesResult = await db.execute({
-      sql: `
-        SELECT s.id, s.user_id, s.content, s.visibility, s.created_at, s.updated_at,
-               u.username, u.display_name,
-               (SELECT COUNT(*) FROM likes WHERE story_id = s.id) as like_count,
-               (SELECT COUNT(*) FROM comments WHERE story_id = s.id) as comment_count
-        FROM stories s
-        INNER JOIN users u ON s.user_id = u.id
-        WHERE s.visibility = 'public' AND (s.archived = 0 OR s.archived IS NULL)
-        ORDER BY s.created_at DESC
-        LIMIT ? OFFSET ?
-      `,
-      args: [limit, offset],
-    })
+    // Try to select avatar_bg_color, but handle case where column might not exist yet
+    let storiesResult
+    try {
+      storiesResult = await db.execute({
+        sql: `
+          SELECT s.id, s.user_id, s.content, s.visibility, s.created_at, s.updated_at,
+                 u.username, u.display_name, u.avatar_url, u.avatar_bg_color,
+                 (SELECT COUNT(*) FROM likes WHERE story_id = s.id) as like_count,
+                 (SELECT COUNT(*) FROM comments WHERE story_id = s.id) as comment_count
+          FROM stories s
+          INNER JOIN users u ON s.user_id = u.id
+          WHERE s.visibility = 'public' AND (s.archived = 0 OR s.archived IS NULL)
+          ORDER BY s.created_at DESC
+          LIMIT ? OFFSET ?
+        `,
+        args: [limit, offset],
+      })
+    } catch (error: any) {
+      // If column doesn't exist, select without it
+      if (error?.message?.includes('no such column: avatar_bg_color')) {
+        storiesResult = await db.execute({
+          sql: `
+            SELECT s.id, s.user_id, s.content, s.visibility, s.created_at, s.updated_at,
+                   u.username, u.display_name, u.avatar_url,
+                   (SELECT COUNT(*) FROM likes WHERE story_id = s.id) as like_count,
+                   (SELECT COUNT(*) FROM comments WHERE story_id = s.id) as comment_count
+            FROM stories s
+            INNER JOIN users u ON s.user_id = u.id
+            WHERE s.visibility = 'public' AND (s.archived = 0 OR s.archived IS NULL)
+            ORDER BY s.created_at DESC
+            LIMIT ? OFFSET ?
+          `,
+          args: [limit, offset],
+        })
+      } else {
+        throw error
+      }
+    }
 
     // Get total count (exclude archived)
     const countResult = await db.execute({
@@ -239,18 +263,40 @@ async function handleGetStoryById(
 
   try {
     // Get story with user info
-    const storyResult = await db.execute({
-      sql: `
-        SELECT s.id, s.user_id, s.content, s.visibility, s.created_at, s.updated_at,
-               u.username, u.display_name,
-               (SELECT COUNT(*) FROM likes WHERE story_id = s.id) as like_count,
-               (SELECT COUNT(*) FROM comments WHERE story_id = s.id) as comment_count
-        FROM stories s
-        INNER JOIN users u ON s.user_id = u.id
-        WHERE s.id = ?
-      `,
-      args: [storyId],
-    })
+    // Try to select avatar_bg_color, but handle case where column might not exist yet
+    let storyResult
+    try {
+      storyResult = await db.execute({
+        sql: `
+          SELECT s.id, s.user_id, s.content, s.visibility, s.created_at, s.updated_at,
+                 u.username, u.display_name, u.avatar_url, u.avatar_bg_color,
+                 (SELECT COUNT(*) FROM likes WHERE story_id = s.id) as like_count,
+                 (SELECT COUNT(*) FROM comments WHERE story_id = s.id) as comment_count
+          FROM stories s
+          INNER JOIN users u ON s.user_id = u.id
+          WHERE s.id = ?
+        `,
+        args: [storyId],
+      })
+    } catch (error: any) {
+      // If column doesn't exist, select without it
+      if (error?.message?.includes('no such column: avatar_bg_color')) {
+        storyResult = await db.execute({
+          sql: `
+            SELECT s.id, s.user_id, s.content, s.visibility, s.created_at, s.updated_at,
+                   u.username, u.display_name, u.avatar_url,
+                   (SELECT COUNT(*) FROM likes WHERE story_id = s.id) as like_count,
+                   (SELECT COUNT(*) FROM comments WHERE story_id = s.id) as comment_count
+            FROM stories s
+            INNER JOIN users u ON s.user_id = u.id
+            WHERE s.id = ?
+          `,
+          args: [storyId],
+        })
+      } else {
+        throw error
+      }
+    }
 
     if (storyResult.rows.length === 0) {
       closeDbClient()
@@ -314,19 +360,45 @@ async function handleGetUserStories(
   const db = getDbClient()
 
   try {
-    // Get user's stories (both public and private)
-    const storiesResult = await db.execute({
-      sql: `
-        SELECT s.id, s.user_id, s.content, s.visibility, s.created_at, s.updated_at,
-               s.archived,
-               (SELECT COUNT(*) FROM likes WHERE story_id = s.id) as like_count,
-               (SELECT COUNT(*) FROM comments WHERE story_id = s.id) as comment_count
-        FROM stories s
-        WHERE s.user_id = ?
-        ORDER BY s.created_at DESC
-      `,
-      args: [userId],
-    })
+    // Get user's stories (both public and private) with user info
+    // Try to select avatar_bg_color, but handle case where column might not exist yet
+    let storiesResult
+    try {
+      storiesResult = await db.execute({
+        sql: `
+          SELECT s.id, s.user_id, s.content, s.visibility, s.created_at, s.updated_at,
+                 s.archived,
+                 u.username, u.display_name, u.avatar_url, u.avatar_bg_color,
+                 (SELECT COUNT(*) FROM likes WHERE story_id = s.id) as like_count,
+                 (SELECT COUNT(*) FROM comments WHERE story_id = s.id) as comment_count
+          FROM stories s
+          INNER JOIN users u ON s.user_id = u.id
+          WHERE s.user_id = ?
+          ORDER BY s.created_at DESC
+        `,
+        args: [userId],
+      })
+    } catch (error: any) {
+      // If column doesn't exist, select without it
+      if (error?.message?.includes('no such column: avatar_bg_color')) {
+        storiesResult = await db.execute({
+          sql: `
+            SELECT s.id, s.user_id, s.content, s.visibility, s.created_at, s.updated_at,
+                   s.archived,
+                   u.username, u.display_name, u.avatar_url,
+                   (SELECT COUNT(*) FROM likes WHERE story_id = s.id) as like_count,
+                   (SELECT COUNT(*) FROM comments WHERE story_id = s.id) as comment_count
+            FROM stories s
+            INNER JOIN users u ON s.user_id = u.id
+            WHERE s.user_id = ?
+            ORDER BY s.created_at DESC
+          `,
+          args: [userId],
+        })
+      } else {
+        throw error
+      }
+    }
 
     closeDbClient()
 

@@ -8,6 +8,8 @@ interface StoryDetailProps {
     user_id: number
     username?: string
     display_name?: string
+    avatar_url?: string | null
+    avatar_bg_color?: string | null
     content: string
     visibility: string
     created_at: string
@@ -54,17 +56,42 @@ function StoryDetail({ story, onRefresh }: StoryDetailProps) {
       }}
     >
       <div style={{ display: 'flex', gap: '12px', marginBottom: '12px' }}>
-        <img
-          src="/icon-line-light.png"
-          alt={story.display_name || story.username || 'User'}
+        <div
           style={{
             width: '40px',
             height: '40px',
             borderRadius: '50%',
+            backgroundColor: story.avatar_bg_color || '#1a1a1a',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
             flexShrink: 0,
-            objectFit: 'cover',
+            border: '1px solid #1a1a1a',
           }}
-        />
+        >
+          {story.avatar_url ? (
+            <img
+              src={story.avatar_url}
+              alt={story.display_name || story.username || 'User'}
+              style={{
+                width: '100%',
+                height: '100%',
+                borderRadius: '50%',
+                objectFit: 'cover',
+              }}
+            />
+          ) : (
+            <img
+              src="/icon-line-light.png"
+              alt={story.display_name || story.username || 'User'}
+              style={{
+                width: '80%',
+                height: '80%',
+                objectFit: 'contain',
+              }}
+            />
+          )}
+        </div>
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
             <strong style={{ color: '#ffffff', fontSize: '14px' }}>

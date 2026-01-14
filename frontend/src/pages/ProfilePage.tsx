@@ -11,6 +11,10 @@ import Sidebar from '../components/layout/Sidebar'
 interface Story {
   id: number
   user_id: number
+  username?: string
+  display_name?: string
+  avatar_url?: string | null
+  avatar_bg_color?: string | null
   content: string
   visibility: string
   created_at: string
@@ -24,6 +28,7 @@ interface UserProfile {
   username: string
   display_name: string | null
   avatar_url: string | null
+  avatar_bg_color: string | null
 }
 
 function ProfilePage() {
@@ -144,30 +149,42 @@ function ProfilePage() {
                   padding: '24px',
                 }}
               >
-                {profile.avatar_url ? (
-            <img
-              src={profile.avatar_url}
-              alt="Avatar"
-                    style={{
-                      width: '96px',
-                      height: '96px',
-                      borderRadius: '50%',
-                      marginBottom: '12px',
-                    }}
-                  />
-                ) : (
-                  <img
-                    src="/icon-line-light.png"
-                    alt={profile.username || 'User'}
-                    style={{
-                      width: '96px',
-                      height: '96px',
-                      borderRadius: '50%',
-                      marginBottom: '12px',
-                      objectFit: 'cover',
-                    }}
-            />
-          )}
+                <div
+                  style={{
+                    width: '96px',
+                    height: '96px',
+                    borderRadius: '50%',
+                    backgroundColor: profile.avatar_bg_color || '#1a1a1a',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginBottom: '12px',
+                    border: '2px solid #1a1a1a',
+                  }}
+                >
+                  {profile.avatar_url ? (
+                    <img
+                      src={profile.avatar_url}
+                      alt="Avatar"
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        borderRadius: '50%',
+                        objectFit: 'cover',
+                      }}
+                    />
+                  ) : (
+                    <img
+                      src="/icon-line-light.png"
+                      alt={profile.username || 'User'}
+                      style={{
+                        width: '80%',
+                        height: '80%',
+                        objectFit: 'contain',
+                      }}
+                    />
+                  )}
+                </div>
                 <h2 style={{ margin: '0 0 8px 0', color: 'var(--text-color, #ffffff)' }}>
                   {profile.display_name || profile.username}
                 </h2>
@@ -183,6 +200,7 @@ function ProfilePage() {
       )}
           <AvatarEditor
             currentAvatarUrl={profile?.avatar_url}
+            currentAvatarBgColor={profile?.avatar_bg_color}
             onAvatarUpdated={handleAvatarUpdated}
           />
             <DisplayNameEditor

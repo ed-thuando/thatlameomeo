@@ -10,6 +10,7 @@ import { calculateDailyScore } from './utils/scores'
 interface UpdateProfileRequest {
   avatar_url?: string
   display_name?: string
+  avatar_bg_color?: string
 }
 
 interface UpdateThemeRequest {
@@ -57,7 +58,7 @@ async function handleGetAllUsers(
     // Get all users
     const usersResult = await db.execute({
       sql: `
-        SELECT id, username, display_name, avatar_url
+        SELECT id, username, display_name, avatar_url, avatar_bg_color
         FROM users
         ORDER BY ${sortBy === 'meomeo_score' ? 'username' : 'username'} ${order.toUpperCase()}
       `,
@@ -73,6 +74,7 @@ async function handleGetAllUsers(
           username: user.username,
           display_name: user.display_name || user.username,
           avatar_url: user.avatar_url,
+          avatar_bg_color: (user as any).avatar_bg_color || '#1a1a1a',
           daily_meomeo_score: dailyScore,
         }
       })
@@ -137,14 +139,32 @@ async function handleGetUserById(
   const db = getDbClient()
 
   try {
-    const userResult = await db.execute({
-      sql: `
-        SELECT id, username, display_name, avatar_url, theme_preference
-        FROM users
-        WHERE id = ?
-      `,
-      args: [userId],
-    })
+    // Try to select avatar_bg_color, but handle case where column might not exist yet
+    let userResult
+    try {
+      userResult = await db.execute({
+        sql: `
+          SELECT id, username, display_name, avatar_url, avatar_bg_color, theme_preference
+          FROM users
+          WHERE id = ?
+        `,
+        args: [userId],
+      })
+    } catch (error: any) {
+      // If column doesn't exist, select without it
+      if (error?.message?.includes('no such column: avatar_bg_color')) {
+        userResult = await db.execute({
+          sql: `
+            SELECT id, username, display_name, avatar_url, theme_preference
+            FROM users
+            WHERE id = ?
+          `,
+          args: [userId],
+        })
+      } else {
+        throw error
+      }
+    }
 
     if (userResult.rows.length === 0) {
       closeDbClient()
@@ -161,6 +181,7 @@ async function handleGetUserById(
       username: user.username,
       display_name: user.display_name || user.username,
       avatar_url: user.avatar_url,
+      avatar_bg_color: (user as any).avatar_bg_color || '#1a1a1a',
       theme_preference: user.theme_preference,
       daily_meomeo_score: dailyScore,
     })
@@ -232,7 +253,7 @@ async function handleUpdateProfile(
     return createErrorResponse(400, 'Request body is required', 'BadRequest')
   }
 
-  const { avatar_url, display_name }: UpdateProfileRequest = JSON.parse(event.body)
+  const { avatar_url, display_name, avatar_bg_color }: UpdateProfileRequest = JSON.parse(event.body)
 
   // Authenticate user
   const authHeader = event.headers.authorization || event.headers.Authorization
@@ -277,6 +298,18 @@ async function handleUpdateProfile(
       args.push(display_name.trim())
     }
 
+    let hasAvatarBgColor = false
+    if (avatar_bg_color !== undefined) {
+      // Validate hex color format
+      if (!/^#[0-9A-Fa-f]{6}$/.test(avatar_bg_color)) {
+        closeDbClient()
+        return createErrorResponse(400, 'Invalid color format. Must be a hex color (e.g., #FF5733)', 'BadRequest')
+      }
+      updates.push('avatar_bg_color = ?')
+      args.push(avatar_bg_color)
+      hasAvatarBgColor = true
+    }
+
     if (updates.length === 0) {
       closeDbClient()
       return createErrorResponse(400, 'No fields to update', 'BadRequest')
@@ -285,24 +318,70 @@ async function handleUpdateProfile(
     updates.push('updated_at = datetime("now")')
     args.push(userId)
 
-    await db.execute({
-      sql: `UPDATE users SET ${updates.join(', ')} WHERE id = ?`,
-      args,
-    })
+    try {
+      await db.execute({
+        sql: `UPDATE users SET ${updates.join(', ')} WHERE id = ?`,
+        args,
+      })
+    } catch (error: any) {
+      // If avatar_bg_color column doesn't exist, try update without it
+      if (error?.message?.includes('no such column: avatar_bg_color') && hasAvatarBgColor) {
+        // Remove avatar_bg_color from updates and args, then retry
+        const avatarBgIndex = updates.findIndex(u => u.includes('avatar_bg_color'))
+        const updatesWithoutBg = updates.filter(u => !u.includes('avatar_bg_color'))
+        const argsWithoutBg = [...args]
+        if (avatarBgIndex !== -1) {
+          // Remove the argument at the same position (before updated_at and userId)
+          argsWithoutBg.splice(avatarBgIndex, 1)
+        }
+        // Remove userId from end and add it back
+        argsWithoutBg.pop()
+        argsWithoutBg.push(userId)
+        
+        await db.execute({
+          sql: `UPDATE users SET ${updatesWithoutBg.join(', ')} WHERE id = ?`,
+          args: argsWithoutBg,
+        })
+        
+        closeDbClient()
+        return createErrorResponse(
+          500,
+          'Avatar background color feature not available. Please run migration: turso db shell <your-db-name> < migrations/004_add_avatar_bg_color.sql',
+          'InternalServerError'
+        )
+      }
+      throw error
+    }
 
     // Get updated user info
-    const userResult = await db.execute({
-      sql: 'SELECT id, username, display_name, avatar_url FROM users WHERE id = ?',
-      args: [userId],
-    })
+    // Try to select avatar_bg_color, but handle case where column might not exist yet
+    let userResult
+    try {
+      userResult = await db.execute({
+        sql: 'SELECT id, username, display_name, avatar_url, avatar_bg_color FROM users WHERE id = ?',
+        args: [userId],
+      })
+    } catch (error: any) {
+      // If column doesn't exist, select without it
+      if (error?.message?.includes('no such column: avatar_bg_color')) {
+        userResult = await db.execute({
+          sql: 'SELECT id, username, display_name, avatar_url FROM users WHERE id = ?',
+          args: [userId],
+        })
+      } else {
+        throw error
+      }
+    }
 
     closeDbClient()
 
+    const user = userResult.rows[0]
     return createSuccessResponse({
-      id: userResult.rows[0].id,
-      username: userResult.rows[0].username,
-      display_name: userResult.rows[0].display_name || userResult.rows[0].username,
-      avatar_url: userResult.rows[0].avatar_url,
+      id: user.id,
+      username: user.username,
+      display_name: user.display_name || user.username,
+      avatar_url: user.avatar_url,
+      avatar_bg_color: (user as any).avatar_bg_color || '#1a1a1a',
     })
   } catch (error) {
     closeDbClient()

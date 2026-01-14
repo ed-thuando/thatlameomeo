@@ -6,6 +6,9 @@ interface Story {
   id: number
   user_id: number
   username?: string
+  display_name?: string
+  avatar_url?: string | null
+  avatar_bg_color?: string | null
   content: string
   visibility: string
   created_at: string
