@@ -5,7 +5,7 @@
  * Usage: node scripts/create-user.js <username> <password> [display_name]
  */
 
-import bcrypt from 'bcrypt'
+import bcrypt from 'bcryptjs'
 import { createClient } from '@libsql/client'
 import * as dotenv from 'dotenv'
 import { fileURLToPath } from 'url'
@@ -23,7 +23,7 @@ try {
     // Skip comments and empty lines
     const trimmed = line.trim()
     if (!trimmed || trimmed.startsWith('#')) return
-    
+
     const [key, ...valueParts] = line.split('=')
     if (key && valueParts.length > 0) {
       const value = valueParts.join('=').trim().replace(/^["']|["']$/g, '')

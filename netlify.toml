@@ -8,7 +8,7 @@
 
 [functions]
   node_bundler = "esbuild"
-  external_node_modules = ["@libsql/client", "libsql", "@libsql/darwin-arm64"]
+  external_node_modules = ["@libsql/client", "libsql", "@libsql/linux-x64-gnu"]
 
 [dev]
   port = 8888

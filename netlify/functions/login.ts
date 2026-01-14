@@ -2,7 +2,7 @@ import { Handler } from '@netlify/functions'
 import { getDbClient, closeDbClient } from './utils/db'
 import { signToken } from './utils/auth'
 import { createErrorResponse, createSuccessResponse, handleCors } from './utils/errors'
-import bcrypt from 'bcrypt'
+import bcrypt from 'bcryptjs'
 
 interface LoginRequest {
   username: string
@@ -19,7 +19,7 @@ interface LoginResponse {
   }
 }
 
-export const handler: Handler = async (event, context) => {
+export const handler: Handler = async (event) => {
   // Handle CORS preflight
   if (event.httpMethod === 'OPTIONS') {
     return handleCors()

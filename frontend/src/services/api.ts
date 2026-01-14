@@ -40,7 +40,7 @@ export async function apiRequest<T>(
   }
 
   if (token) {
-    headers['Authorization'] = `Bearer ${token}`
+    ;(headers as any)['Authorization'] = `Bearer ${token}`
   }
 
   const url = `${API_BASE_URL}${endpoint}`
