@@ -108,6 +108,8 @@ async function handleCreateStory(
       {
         ...story,
         meomeo_score: dailyScore,
+        daily_meomeo_score: dailyScore,
+        updated_user_id: userId,
       },
       201
     )
@@ -343,6 +345,93 @@ async function handleGetUserStories(
 }
 
 /**
+ * PUT /stories/:id - Update a story (visibility)
+ */
+async function handleUpdateStory(
+  event: {
+    path: string
+    body: string | null
+    headers: Record<string, string | null>
+  }
+): Promise<Response> {
+  // Extract story ID from path
+  const pathParts = event.path.split('/')
+  const storyId = pathParts[pathParts.length - 1]
+
+  if (!storyId || isNaN(Number(storyId))) {
+    return createErrorResponse(400, 'Invalid story ID', 'BadRequest')
+  }
+
+  if (!event.body) {
+    return createErrorResponse(400, 'Request body is required', 'BadRequest')
+  }
+
+  const { visibility }: { visibility?: string } = JSON.parse(event.body)
+
+  if (!visibility || (visibility !== 'public' && visibility !== 'private')) {
+    return createErrorResponse(
+      400,
+      'Visibility must be "public" or "private"',
+      'BadRequest'
+    )
+  }
+
+  // Authenticate user
+  const authHeader = event.headers.authorization || event.headers.Authorization
+  const token = extractTokenFromHeader(authHeader)
+
+  if (!token) {
+    return createErrorResponse(401, 'Authentication required', 'Unauthorized')
+  }
+
+  let userId: number
+  try {
+    const payload = verifyToken(token)
+    userId = payload.userId
+  } catch (error) {
+    return createErrorResponse(401, 'Invalid or expired token', 'Unauthorized')
+  }
+
+  const db = getDbClient()
+
+  try {
+    // Verify story belongs to user
+    const storyResult = await db.execute({
+      sql: 'SELECT user_id FROM stories WHERE id = ?',
+      args: [storyId],
+    })
+
+    if (storyResult.rows.length === 0) {
+      closeDbClient()
+      return createErrorResponse(404, 'Story not found', 'NotFound')
+    }
+
+    if (storyResult.rows[0].user_id !== userId) {
+      closeDbClient()
+      return createErrorResponse(403, 'Access denied', 'Forbidden')
+    }
+
+    // Update visibility
+    await db.execute({
+      sql: 'UPDATE stories SET visibility = ?, updated_at = datetime("now") WHERE id = ?',
+      args: [visibility, storyId],
+    })
+
+    closeDbClient()
+
+    return createSuccessResponse({ message: 'Story updated successfully' })
+  } catch (error) {
+    closeDbClient()
+    console.error('Error updating story:', error)
+    return createErrorResponse(
+      500,
+      'Internal server error',
+      'InternalServerError'
+    )
+  }
+}
+
+/**
  * PUT /stories/:id/archive - Archive a story
  */
 async function handleArchiveStory(
@@ -509,6 +598,10 @@ export const handler: Handler = async (event, context) => {
 
   if (event.httpMethod === 'GET' && path.match(/^\/\d+$/)) {
     return handleGetStoryById(event)
+  }
+
+  if (event.httpMethod === 'PUT' && path.match(/^\/\d+$/) && !path.includes('archive')) {
+    return handleUpdateStory(event)
   }
 
   if (event.httpMethod === 'PUT' && path.match(/^\/\d+\/archive$/)) {

@@ -7,27 +7,36 @@ import Sidebar from '../components/layout/Sidebar'
 
 function HomePage() {
   const [refreshKey, setRefreshKey] = useState(0)
+  const [userListRefreshKey, setUserListRefreshKey] = useState(0)
 
   const handleStoryCreated = () => {
-    // Trigger refresh of story feed
+    // Trigger refresh of story feed and user list
     setRefreshKey((prev) => prev + 1)
+    setUserListRefreshKey((prev) => prev + 1)
   }
 
   const handleArchive = (storyId: number) => {
     // Archive story and refresh feed
     setRefreshKey((prev) => prev + 1)
+    setUserListRefreshKey((prev) => prev + 1)
   }
 
   const handleDelete = (storyId: number) => {
     // Delete story and refresh feed
     setRefreshKey((prev) => prev + 1)
+    setUserListRefreshKey((prev) => prev + 1)
+  }
+
+  const handleInteraction = () => {
+    // Refresh user list when likes/comments/shares happen
+    setUserListRefreshKey((prev) => prev + 1)
   }
 
   return (
     <div style={{ display: 'flex', minHeight: '100vh', backgroundColor: '#000000' }}>
       <Sidebar />
       <div style={{ marginLeft: '72px', width: '100%', backgroundColor: '#000000' }}>
-        <Header />
+      <Header />
         <div
           style={{
             marginTop: '60px',
@@ -45,15 +54,16 @@ function HomePage() {
             {/* Left sidebar content - can be used for suggestions or empty */}
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-            <StoryCreateBox onStoryCreated={handleStoryCreated} />
-            <StoryFeed
-              refreshKey={refreshKey}
-              onArchive={handleArchive}
-              onDelete={handleDelete}
-            />
-          </div>
+          <StoryCreateBox onStoryCreated={handleStoryCreated} />
+          <StoryFeed
+            refreshKey={refreshKey}
+            onArchive={handleArchive}
+            onDelete={handleDelete}
+              onInteraction={handleInteraction}
+          />
+        </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-            <UserList />
+            <UserList key={userListRefreshKey} />
           </div>
         </div>
       </div>

@@ -31,6 +31,9 @@ User stories/notes MUST support public and private visibility settings. Private 
 ### V. Component Testing & Quality
 Critical user flows MUST have integration tests. React components MUST be testable in isolation. Netlify Functions MUST have unit tests for business logic. All tests MUST run in CI/CD pipeline before deployment. Code MUST pass linting (ESLint) and formatting (Prettier) checks before merge.
 
+### VI. Theme & Styling Consistency
+All theme colors, spacing, and styling values MUST be defined as CSS variables in the root stylesheet (`src/index.css`). Components MUST reference CSS variables (e.g., `var(--text-color)`) rather than hardcoded color values. When theme colors are changed, updates MUST be made at the CSS variable level only, never by manually updating individual component styles. All icons MUST use consistent SVG format with uniform stroke width and color variables. Border widths, border colors, background colors, and text colors MUST all reference CSS variables for maintainability.
+
 ## Technology Stack
 
 **Frontend**: React 18+ with Vite as build tool. TypeScript for type safety. Tailwind CSS for styling (or CSS Modules if preferred).
@@ -63,4 +66,4 @@ This constitution supersedes all other development practices. Amendments require
 
 All PRs and code reviews MUST verify compliance with constitution principles. Complexity beyond these principles MUST be justified with clear rationale. Use `.specify/templates/` for feature planning and implementation guidance.
 
-**Version**: 1.0.0 | **Ratified**: 2025-01-27 | **Last Amended**: 2025-01-27
+**Version**: 1.1.0 | **Ratified**: 2025-01-27 | **Last Amended**: 2025-01-14

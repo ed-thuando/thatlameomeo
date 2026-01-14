@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import { apiGet, apiPost, ApiException } from '../../services/api'
 import { useAuth } from '../../hooks/useAuth'
+import { useNavigate } from 'react-router-dom'
+import { updateUserScore } from '../../hooks/useUserScoreUpdate'
 
 interface Comment {
   id: number
@@ -12,6 +14,7 @@ interface Comment {
 
 interface CommentSectionProps {
   storyId: number
+  storyAuthorId?: number
   commentCount?: number
   compact?: boolean
   onComment?: () => void
@@ -19,11 +22,13 @@ interface CommentSectionProps {
 
 function CommentSection({
   storyId,
+  storyAuthorId,
   commentCount: initialCommentCount,
   compact = false,
   onComment,
 }: CommentSectionProps) {
   const { isAuthenticated } = useAuth()
+  const navigate = useNavigate()
   const [comments, setComments] = useState<Comment[]>([])
   const [commentCount, setCommentCount] = useState(initialCommentCount || 0)
   const [newComment, setNewComment] = useState('')
@@ -61,7 +66,7 @@ function CommentSection({
     setIsLoading(true)
 
     try {
-      await apiPost('/comments', {
+      const response = await apiPost<{ id: number; user_id: number; story_id: number; content: string; created_at: string; commentCount?: number; daily_meomeo_score?: number; updated_user_id?: number }>('/comments', {
         story_id: storyId,
         content: newComment.trim(),
       })
@@ -70,6 +75,13 @@ function CommentSection({
       setCommentCount((prev) => prev + 1)
       if (!compact) {
         fetchComments()
+      }
+
+      // Update user score immediately if available
+      if (response?.updated_user_id && response?.daily_meomeo_score !== undefined) {
+        updateUserScore(response.updated_user_id, response.daily_meomeo_score)
+      } else if (storyAuthorId && response?.daily_meomeo_score !== undefined) {
+        updateUserScore(storyAuthorId, response.daily_meomeo_score)
       }
 
       if (onComment) {
@@ -94,11 +106,28 @@ function CommentSection({
     })
   }
 
+  const formatTimeAgo = (dateString: string) => {
+    const date = new Date(dateString)
+    const now = new Date()
+    const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000)
+
+    if (diffInSeconds < 60) return `${diffInSeconds}s`
+    if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)}m`
+    if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)}h`
+    if (diffInSeconds < 604800) return `${Math.floor(diffInSeconds / 86400)}d`
+    return formatDate(dateString)
+  }
+
+  const handleCommentClick = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    navigate(`/post/${storyId}`)
+  }
+
   if (compact) {
     return (
       <div onClick={(e) => e.stopPropagation()}>
         <button
-          onClick={() => setShowComments(!showComments)}
+          onClick={handleCommentClick}
           style={{
             background: 'none',
             border: 'none',
@@ -108,18 +137,24 @@ function CommentSection({
             gap: '6px',
             padding: '4px 8px',
             borderRadius: '8px',
-            color: 'var(--secondary-text, #a8a8a8)',
+            color: '#a8a8a8',
             transition: 'background-color 0.2s',
           }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.backgroundColor = 'var(--button-hover-bg, #1f1f1f)'
+            e.currentTarget.style.backgroundColor = '#1f1f1f'
           }}
           onMouseLeave={(e) => {
             e.currentTarget.style.backgroundColor = 'transparent'
           }}
         >
-          <span style={{ fontSize: '20px' }}>💬</span>
-          <span style={{ fontSize: '14px' }}>{commentCount > 0 ? commentCount : ''}</span>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#737373" strokeWidth="1.5">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+          </svg>
+          {commentCount > 0 && (
+            <span style={{ fontSize: '14px', color: '#737373' }}>
+              {commentCount}
+            </span>
+          )}
         </button>
       </div>
     )
@@ -139,7 +174,7 @@ function CommentSection({
             gap: '6px',
             padding: '4px 8px',
             borderRadius: '8px',
-            color: 'var(--secondary-text, #a8a8a8)',
+            color: '#737373',
             transition: 'background-color 0.2s',
           }}
           onMouseEnter={(e) => {
@@ -149,8 +184,10 @@ function CommentSection({
             e.currentTarget.style.backgroundColor = 'transparent'
           }}
         >
-          <span style={{ fontSize: '20px' }}>💬</span>
-          <span style={{ fontSize: '14px', color: 'var(--secondary-text, #a8a8a8)' }}>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#737373" strokeWidth="1.5">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+          </svg>
+          <span style={{ fontSize: '14px', color: '#a8a8a8' }}>
             {commentCount} {commentCount === 1 ? 'comment' : 'comments'}
           </span>
         </button>
@@ -169,7 +206,7 @@ function CommentSection({
                   width: '100%',
                   marginBottom: '8px',
                   backgroundColor: 'var(--card-bg, #1a1a1a)',
-                  border: '1px solid var(--border-color, #262626)',
+                  border: '0.5px solid #1a1a1a',
                   borderRadius: '8px',
                   color: '#ffffff',
                   padding: '12px',
@@ -206,20 +243,20 @@ function CommentSection({
                 style={{
                   padding: '12px',
                   marginBottom: '8px',
-                  backgroundColor: 'var(--card-bg, #1a1a1a)',
-                  border: '1px solid var(--border-color, #262626)',
+                  backgroundColor: '#000000',
+                  border: '0.5px solid #1a1a1a',
                   borderRadius: '8px',
                 }}
               >
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
-                  <strong style={{ color: 'var(--text-color, #ffffff)', fontSize: '14px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+                  <strong style={{ color: '#ffffff', fontSize: '14px' }}>
                     {comment.username || 'Unknown User'}
                   </strong>
-                  <span style={{ color: 'var(--secondary-text, #a8a8a8)', fontSize: '12px' }}>
-                    {formatDate(comment.created_at)}
+                  <span style={{ color: '#737373', fontSize: '12px' }}>
+                    {formatTimeAgo(comment.created_at)}
                   </span>
                 </div>
-                <div style={{ color: 'var(--text-color, #ffffff)', fontSize: '14px' }}>
+                <div style={{ color: '#ffffff', fontSize: '14px', lineHeight: '1.5' }}>
                   {comment.content}
                 </div>
               </div>

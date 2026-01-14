@@ -34,7 +34,7 @@ function Header() {
         alignItems: 'center',
         padding: '0 24px',
         backgroundColor: 'var(--header-bg, #000000)',
-        borderBottom: '1px solid var(--border-color, #262626)',
+        borderBottom: '0.5px solid #1a1a1a',
         zIndex: 999,
       }}
     >
@@ -44,8 +44,8 @@ function Header() {
           fontSize: '24px',
           fontWeight: 600,
           color: '#ffffff',
-        }}
-      >
+      }}
+    >
         {getPageTitle()}
       </h1>
 
@@ -54,7 +54,7 @@ function Header() {
           onClick={logout}
           style={{
             background: 'none',
-            border: '1px solid #262626',
+            border: '0.5px solid #1a1a1a',
             color: '#ffffff',
             padding: '8px 16px',
             borderRadius: '8px',

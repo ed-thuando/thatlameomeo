@@ -25,9 +25,10 @@ interface StoryFeedProps {
   refreshKey?: number
   onArchive?: (storyId: number) => void
   onDelete?: (storyId: number) => void
+  onInteraction?: () => void
 }
 
-function StoryFeed({ refreshKey, onArchive, onDelete }: StoryFeedProps) {
+function StoryFeed({ refreshKey, onArchive, onDelete, onInteraction }: StoryFeedProps) {
   const [stories, setStories] = useState<Story[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -77,8 +78,8 @@ function StoryFeed({ refreshKey, onArchive, onDelete }: StoryFeedProps) {
     return (
       <div
         style={{
-          backgroundColor: 'var(--card-bg, #1a1a1a)',
-          border: '1px solid var(--border-color, #262626)',
+          backgroundColor: '#000000',
+          border: '0.5px solid #1a1a1a',
           borderRadius: '12px',
           padding: '16px',
         }}
@@ -107,8 +108,8 @@ function StoryFeed({ refreshKey, onArchive, onDelete }: StoryFeedProps) {
     return (
       <div
         style={{
-          backgroundColor: 'var(--card-bg, #1a1a1a)',
-          border: '1px solid var(--border-color, #262626)',
+          backgroundColor: '#000000',
+          border: '0.5px solid #1a1a1a',
           borderRadius: '12px',
           padding: '16px',
           color: '#ffffff',
@@ -124,8 +125,8 @@ function StoryFeed({ refreshKey, onArchive, onDelete }: StoryFeedProps) {
     return (
       <div
         style={{
-          backgroundColor: 'var(--card-bg, #1a1a1a)',
-          border: '1px solid var(--border-color, #262626)',
+          backgroundColor: '#000000',
+          border: '0.5px solid #1a1a1a',
           borderRadius: '12px',
           padding: '24px',
           textAlign: 'center',
@@ -146,6 +147,7 @@ function StoryFeed({ refreshKey, onArchive, onDelete }: StoryFeedProps) {
           onArchive={onArchive}
           onDelete={onDelete}
           onRefresh={handleRefresh}
+          onInteraction={onInteraction}
         />
       ))}
       {hasMore && (
@@ -155,7 +157,7 @@ function StoryFeed({ refreshKey, onArchive, onDelete }: StoryFeedProps) {
             disabled={isLoading}
             style={{
               backgroundColor: 'var(--card-bg, #1a1a1a)',
-              border: '1px solid var(--border-color, #262626)',
+              border: '0.5px solid #1a1a1a',
               color: '#ffffff',
               padding: '12px 24px',
               borderRadius: '8px',
@@ -164,8 +166,8 @@ function StoryFeed({ refreshKey, onArchive, onDelete }: StoryFeedProps) {
               fontWeight: 600,
             }}
           >
-            {isLoading ? 'Loading...' : 'Load More'}
-          </button>
+          {isLoading ? 'Loading...' : 'Load More'}
+        </button>
         </div>
       )}
     </div>

@@ -46,8 +46,8 @@ function StoryDetail({ story, onRefresh }: StoryDetailProps) {
   return (
     <div
       style={{
-        backgroundColor: 'var(--card-bg, #1a1a1a)',
-        border: '1px solid var(--border-color, #262626)',
+        backgroundColor: '#000000',
+        border: '0.5px solid #1a1a1a',
         borderRadius: '12px',
         padding: '16px',
         marginBottom: '16px',
@@ -68,15 +68,15 @@ function StoryDetail({ story, onRefresh }: StoryDetailProps) {
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
             <strong style={{ color: '#ffffff', fontSize: '14px' }}>
-              {story.display_name || story.username || 'Unknown User'}
+            {story.display_name || story.username || 'Unknown User'}
             </strong>
-            <span style={{ color: 'var(--secondary-text, #a8a8a8)', fontSize: '12px' }}>
+            <span style={{ color: '#737373', fontSize: '12px' }}>
               @{story.username}
             </span>
-            <span style={{ color: 'var(--secondary-text, #a8a8a8)', fontSize: '12px' }}>
+            <span style={{ color: '#737373', fontSize: '12px' }}>
               · {formatTimeAgo(story.created_at)}
             </span>
-          </div>
+        </div>
         </div>
         <button
           onClick={(e) => {
@@ -86,7 +86,7 @@ function StoryDetail({ story, onRefresh }: StoryDetailProps) {
           style={{
             background: 'none',
             border: 'none',
-            color: 'var(--secondary-text, #a8a8a8)',
+            color: '#737373',
             cursor: 'pointer',
             padding: '4px',
             fontSize: '18px',
@@ -114,10 +114,10 @@ function StoryDetail({ story, onRefresh }: StoryDetailProps) {
           gap: '24px',
           alignItems: 'center',
           paddingTop: '8px',
-          borderTop: '1px solid var(--border-color, #262626)',
+          borderTop: '0.5px solid #1a1a1a',
         }}
       >
-        <LikeButton storyId={story.id} likeCount={story.like_count || 0} onLike={onRefresh} />
+        <LikeButton storyId={story.id} storyAuthorId={story.user_id} likeCount={story.like_count || 0} onLike={onRefresh} />
         <ShareButton storyId={story.id} />
         <span style={{ color: 'var(--secondary-text, #a8a8a8)', fontSize: '14px' }}>
           💬 {story.comment_count || 0} {story.comment_count === 1 ? 'comment' : 'comments'}

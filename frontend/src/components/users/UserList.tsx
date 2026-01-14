@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback, useMemo, memo } from 'react'
 import { apiGet, ApiException } from '../../services/api'
+import { useUserScoreUpdate } from '../../hooks/useUserScoreUpdate'
 
 interface User {
   id: number
@@ -11,16 +12,49 @@ interface UsersResponse {
   users: User[]
 }
 
+// Memoized user item component to prevent unnecessary re-renders
+const UserItem = memo(({ user }: { user: User }) => {
+  return (
+    <div
+      style={{
+        padding: '12px 0',
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+      }}
+    >
+      <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flex: 1 }}>
+        <img
+          src="/icon-line-light.png"
+          alt={user.username}
+          style={{
+            width: '32px',
+            height: '32px',
+            borderRadius: '50%',
+            objectFit: 'cover',
+          }}
+        />
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+          <span style={{ color: '#ffffff', fontSize: '14px', fontWeight: 500 }}>
+            {user.username}
+          </span>
+          <span style={{ color: '#737373', fontSize: '12px' }}>
+            🐱 {user.daily_meomeo_score} MeoMeo
+          </span>
+        </div>
+      </div>
+    </div>
+  )
+})
+
+UserItem.displayName = 'UserItem'
+
 function UserList() {
-  const [users, setUsers] = useState<User[]>([])
+  const [users, setUsers] = useState<Map<number, User>>(new Map())
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
-  useEffect(() => {
-    fetchUsers()
-  }, [])
-
-  const fetchUsers = async () => {
+  const fetchUsers = useCallback(async () => {
     setIsLoading(true)
     setError(null)
 
@@ -28,7 +62,12 @@ function UserList() {
       const response = await apiGet<UsersResponse>(
         `/users?sort=meomeo_score&order=desc`
       )
-      setUsers(response.users)
+      // Convert array to Map for O(1) lookups
+      const usersMap = new Map<number, User>()
+      response.users.forEach((user) => {
+        usersMap.set(user.id, user)
+      })
+      setUsers(usersMap)
     } catch (err) {
       if (err instanceof ApiException) {
         setError(err.message)
@@ -38,14 +77,42 @@ function UserList() {
     } finally {
       setIsLoading(false)
     }
-  }
+  }, [])
+
+  useEffect(() => {
+    fetchUsers()
+  }, [fetchUsers])
+
+  // Update a specific user's score without refetching all users
+  const handleScoreUpdate = useCallback((userId: number, newScore: number) => {
+    setUsers((prevUsers) => {
+      const updatedUsers = new Map(prevUsers)
+      const user = updatedUsers.get(userId)
+      if (user && user.daily_meomeo_score !== newScore) {
+        updatedUsers.set(userId, { ...user, daily_meomeo_score: newScore })
+        // Note: Sorting happens in useMemo below, so we just update the Map
+        return updatedUsers
+      }
+      return prevUsers
+    })
+  }, [])
+
+  // Register for score updates
+  useUserScoreUpdate(handleScoreUpdate)
+
+  // Convert Map to sorted array for rendering
+  const sortedUsers = useMemo(() => {
+    return Array.from(users.values()).sort(
+      (a, b) => b.daily_meomeo_score - a.daily_meomeo_score
+    )
+  }, [users])
 
   if (error) {
     return (
       <div
         style={{
           backgroundColor: 'var(--card-bg, #1a1a1a)',
-          border: '1px solid var(--border-color, #262626)',
+          border: '0.5px solid #1a1a1a',
           borderRadius: '12px',
           padding: '16px',
         }}
@@ -75,7 +142,7 @@ function UserList() {
       <div
         style={{
           backgroundColor: 'var(--card-bg, #1a1a1a)',
-          border: '1px solid var(--border-color, #262626)',
+          border: '0.5px solid #1a1a1a',
           borderRadius: '12px',
           padding: '16px',
           color: 'var(--text-color, #ffffff)',
@@ -89,8 +156,8 @@ function UserList() {
   return (
     <div
       style={{
-        backgroundColor: 'var(--card-bg, #1a1a1a)',
-        border: '1px solid var(--border-color, #262626)',
+        backgroundColor: '#000000',
+        border: '0.5px solid #1a1a1a',
         borderRadius: '12px',
         padding: '16px',
       }}
@@ -99,37 +166,14 @@ function UserList() {
         Users - Daily MeoMeo Scores
       </h3>
       <div>
-        {users.map((user, index) => (
+        {sortedUsers.map((user, index) => (
           <div
             key={user.id}
             style={{
-              padding: '12px 0',
-              borderBottom: index < users.length - 1 ? '1px solid #262626' : 'none',
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
+              borderBottom: index < sortedUsers.length - 1 ? '0.5px solid #1a1a1a' : 'none',
             }}
           >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flex: 1 }}>
-              <img
-                src="/icon-line-light.png"
-                alt={user.username}
-                style={{
-                  width: '32px',
-                  height: '32px',
-                  borderRadius: '50%',
-                  objectFit: 'cover',
-                }}
-              />
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-                <span style={{ color: '#ffffff', fontSize: '14px', fontWeight: 500 }}>
-                  {user.username}
-                </span>
-                <span style={{ color: '#a8a8a8', fontSize: '12px' }}>
-                  🐱 {user.daily_meomeo_score} MeoMeo
-                </span>
-              </div>
-            </div>
+            <UserItem user={user} />
           </div>
         ))}
       </div>

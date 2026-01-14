@@ -3,16 +3,20 @@
   --secondary-color: #6c757d;
   --background-color: #000000;
   --text-color: #ffffff;
-  --border-color: #262626;
+  --border-color: #1a1a1a;
   --sidebar-bg: #000000;
   --sidebar-active-bg: #1a1a1a;
   --header-bg: #000000;
-  --card-bg: #1a1a1a;
-  --card-hover-bg: #1f1f1f;
-  --button-hover-bg: #1f1f1f;
-  --button-disabled-bg: #333;
-  --secondary-text: #a8a8a8;
-  --avatar-bg: #333;
+  --card-bg: #000000;
+  --card-hover-bg: #0a0a0a;
+  --button-hover-bg: #1a1a1a;
+  --button-disabled-bg: #1a1a1a;
+  --secondary-text: #737373;
+  --avatar-bg: #1a1a1a;
+  --visibility-icon-public: #737373;
+  --visibility-icon-private: #525252;
+  --border-width: 0.5px;
+  --icon-stroke-width: 1.5;
 }
 
 * {
@@ -51,7 +55,7 @@ button {
   font-family: inherit;
   font-size: inherit;
   padding: 8px 16px;
-  border: 1px solid var(--border-color, #262626);
+  border: 0.5px solid var(--border-color, #1a1a1a);
   border-radius: 4px;
   background-color: var(--background-color, #000000);
   color: var(--text-color, #ffffff);
@@ -73,9 +77,9 @@ textarea {
   font-family: inherit;
   font-size: inherit;
   padding: 8px;
-  border: 1px solid var(--border-color, #262626);
+  border: 0.5px solid var(--border-color, #1a1a1a);
   border-radius: 4px;
-  background-color: var(--card-bg, #1a1a1a);
+  background-color: var(--card-bg, #000000);
   color: var(--text-color, #ffffff);
 }
 

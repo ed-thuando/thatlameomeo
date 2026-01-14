@@ -115,6 +115,7 @@ async function handleCreateComment(
         ...comment,
         commentCount,
         daily_meomeo_score: dailyScore,
+        updated_user_id: storyAuthorId,
       },
       201
     )

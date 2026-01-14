@@ -109,7 +109,7 @@ function ProfilePage() {
       <div style={{ display: 'flex', minHeight: '100vh', backgroundColor: '#000000' }}>
         <Sidebar />
         <div style={{ marginLeft: '72px', width: '100%', backgroundColor: '#000000' }}>
-          <Header />
+        <Header />
           <div style={{ marginTop: '60px', padding: '24px', color: '#ff4444' }}>{error}</div>
         </div>
       </div>
@@ -120,7 +120,7 @@ function ProfilePage() {
     <div style={{ display: 'flex', minHeight: '100vh', backgroundColor: '#000000' }}>
       <Sidebar />
       <div style={{ marginLeft: '72px', width: '100%', backgroundColor: '#000000' }}>
-        <Header />
+      <Header />
         <div
           style={{
             marginTop: '60px',
@@ -135,7 +135,7 @@ function ProfilePage() {
           }}
         >
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-            {profile && (
+      {profile && (
               <div
                 style={{
                   backgroundColor: 'var(--card-bg, #1a1a1a)',
@@ -145,9 +145,9 @@ function ProfilePage() {
                 }}
               >
                 {profile.avatar_url ? (
-                  <img
-                    src={profile.avatar_url}
-                    alt="Avatar"
+            <img
+              src={profile.avatar_url}
+              alt="Avatar"
                     style={{
                       width: '96px',
                       height: '96px',
@@ -166,35 +166,35 @@ function ProfilePage() {
                       marginBottom: '12px',
                       objectFit: 'cover',
                     }}
-                  />
-                )}
+            />
+          )}
                 <h2 style={{ margin: '0 0 8px 0', color: 'var(--text-color, #ffffff)' }}>
                   {profile.display_name || profile.username}
                 </h2>
                 <p style={{ margin: '0 0 12px 0', color: 'var(--secondary-text, #a8a8a8)' }}>
                   @{profile.username}
                 </p>
-                {dailyScore !== null && (
+          {dailyScore !== null && (
                   <p style={{ margin: 0, color: 'var(--text-color, #ffffff)' }}>
-                    <strong>Daily MeoMeo Score: 🐱 {dailyScore}</strong>
-                  </p>
-                )}
-              </div>
-            )}
-            <AvatarEditor
-              currentAvatarUrl={profile?.avatar_url}
-              onAvatarUpdated={handleAvatarUpdated}
-            />
+              <strong>Daily MeoMeo Score: 🐱 {dailyScore}</strong>
+            </p>
+          )}
+        </div>
+      )}
+          <AvatarEditor
+            currentAvatarUrl={profile?.avatar_url}
+            onAvatarUpdated={handleAvatarUpdated}
+          />
             <DisplayNameEditor
               currentDisplayName={profile?.display_name}
               onDisplayNameUpdated={handleDisplayNameUpdated}
             />
-          </div>
+        </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-            {isLoading ? (
+          {isLoading ? (
               <div style={{ color: 'var(--text-color, #ffffff)' }}>Loading stories...</div>
-            ) : stories.length === 0 ? (
+          ) : stories.length === 0 ? (
               <div
                 style={{
                   backgroundColor: 'var(--card-bg, #1a1a1a)',
@@ -207,22 +207,22 @@ function ProfilePage() {
               >
                 No stories yet. Create your first story!
               </div>
-            ) : (
-              <div>
-                {stories.map((story) => (
-                  <StoryCard
-                    key={story.id}
-                    story={{
-                      ...story,
-                      username: profile?.display_name || profile?.username,
-                    }}
-                    showActions={false}
-                    onArchive={handleArchive}
-                    onDelete={handleDelete}
-                  />
-                ))}
-              </div>
-            )}
+          ) : (
+            <div>
+              {stories.map((story) => (
+                <StoryCard
+                  key={story.id}
+                  story={{
+                    ...story,
+                    username: profile?.display_name || profile?.username,
+                  }}
+                  showActions={false}
+                  onArchive={handleArchive}
+                  onDelete={handleDelete}
+                />
+              ))}
+            </div>
+          )}
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>

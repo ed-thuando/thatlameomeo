@@ -92,6 +92,7 @@ async function handleLikeStory(
       isLiked: true,
       likeCount,
       daily_meomeo_score: dailyScore,
+      updated_user_id: storyAuthorId,
     })
   } catch (error) {
     closeDbClient()
@@ -173,6 +174,7 @@ async function handleUnlikeStory(
       isLiked: false,
       likeCount,
       daily_meomeo_score: dailyScore,
+      updated_user_id: storyAuthorId,
     })
   } catch (error) {
     closeDbClient()

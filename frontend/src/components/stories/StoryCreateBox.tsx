@@ -1,5 +1,7 @@
 import { useState, FormEvent } from 'react'
 import { apiPost, ApiException } from '../../services/api'
+import { updateUserScore } from '../../hooks/useUserScoreUpdate'
+import { useAuth } from '../../hooks/useAuth'
 
 interface StoryCreateBoxProps {
   onStoryCreated?: () => void
@@ -22,6 +24,7 @@ interface CreateStoryResponse {
 const MAX_CONTENT_LENGTH = 5000
 
 function StoryCreateBox({ onStoryCreated }: StoryCreateBoxProps) {
+  const { user } = useAuth()
   const [content, setContent] = useState('')
   const [visibility, setVisibility] = useState<'public' | 'private'>('public')
   const [error, setError] = useState<string | null>(null)
@@ -52,7 +55,14 @@ function StoryCreateBox({ onStoryCreated }: StoryCreateBoxProps) {
         visibility,
       }
 
-      const response = await apiPost<CreateStoryResponse>('/stories', request)
+      const response = await apiPost<CreateStoryResponse & { daily_meomeo_score?: number; updated_user_id?: number }>('/stories', request)
+
+      // Update user score immediately if available
+      if (response?.updated_user_id && response?.daily_meomeo_score !== undefined) {
+        updateUserScore(response.updated_user_id, response.daily_meomeo_score)
+      } else if (user?.id && response?.daily_meomeo_score !== undefined) {
+        updateUserScore(user.id, response.daily_meomeo_score)
+      }
 
       // Success
       setContent('')
@@ -76,8 +86,8 @@ function StoryCreateBox({ onStoryCreated }: StoryCreateBoxProps) {
   return (
     <div
       style={{
-        backgroundColor: 'var(--card-bg, #1a1a1a)',
-        border: '1px solid var(--border-color, #262626)',
+        backgroundColor: '#000000',
+        border: '0.5px solid #1a1a1a',
         borderRadius: '12px',
         padding: '16px',
         marginBottom: '16px',
@@ -121,7 +131,7 @@ function StoryCreateBox({ onStoryCreated }: StoryCreateBoxProps) {
             rows={4}
             maxLength={MAX_CONTENT_LENGTH}
             required
-            placeholder="Start a thread..."
+            placeholder="Start a meomeo..."
             style={{
               width: '100%',
               backgroundColor: 'transparent',
@@ -140,7 +150,7 @@ function StoryCreateBox({ onStoryCreated }: StoryCreateBoxProps) {
             justifyContent: 'space-between',
             alignItems: 'center',
             paddingTop: '12px',
-            borderTop: '1px solid var(--border-color, #262626)',
+            borderTop: '0.5px solid #1a1a1a',
           }}
         >
           <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
@@ -189,7 +199,7 @@ function StoryCreateBox({ onStoryCreated }: StoryCreateBoxProps) {
             <span
               style={{
                 fontSize: '12px',
-                color: '#a8a8a8',
+                color: '#737373',
               }}
             >
               {content.length} / {MAX_CONTENT_LENGTH}

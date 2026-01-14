@@ -43,5 +43,35 @@ export async function calculateDailyScore(userId: number): Promise<number> {
   })
   const commentsCount = (commentsResult.rows[0]?.count as number) || 0
 
-  return postsCount + likesCount + commentsCount
+  const totalScore = postsCount + likesCount + commentsCount
+
+  // Record score change with timestamp
+  await recordDailyScore(userId, totalScore, today)
+
+  return totalScore
+}
+
+/**
+ * Record daily score with timestamp for historical tracking
+ */
+async function recordDailyScore(userId: number, score: number, date: string): Promise<void> {
+  const db = getDbClient()
+  
+  try {
+    // Insert or update the daily score record
+    await db.execute({
+      sql: `
+        INSERT INTO daily_score_history (user_id, score, date, created_at)
+        VALUES (?, ?, ?, datetime('now'))
+        ON CONFLICT(user_id, date) DO UPDATE SET
+          score = ?,
+          created_at = datetime('now')
+      `,
+      args: [userId, score, date, score],
+    })
+  } catch (error) {
+    // Silently fail if table doesn't exist yet (migration not run)
+    // This allows the system to work before migration is applied
+    console.error('Error recording daily score:', error)
+  }
 }

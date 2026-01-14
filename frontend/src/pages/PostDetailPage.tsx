@@ -66,7 +66,7 @@ function PostDetailPage() {
       <div style={{ display: 'flex', minHeight: '100vh', backgroundColor: '#000000' }}>
         <Sidebar />
         <div style={{ marginLeft: '72px', width: '100%', backgroundColor: '#000000' }}>
-          <Header />
+        <Header />
           <div style={{ marginTop: '60px', padding: '24px', color: '#ffffff' }}>
             Loading story...
           </div>
@@ -80,7 +80,7 @@ function PostDetailPage() {
       <div style={{ display: 'flex', minHeight: '100vh', backgroundColor: '#000000' }}>
         <Sidebar />
         <div style={{ marginLeft: '72px', width: '100%' }}>
-          <Header />
+        <Header />
           <div
             style={{
               marginTop: '60px',
@@ -118,7 +118,7 @@ function PostDetailPage() {
     <div style={{ display: 'flex', minHeight: '100vh', backgroundColor: 'var(--background-color, #000000)' }}>
       <Sidebar />
         <div style={{ marginLeft: '72px', width: '100%', backgroundColor: '#000000' }}>
-          <Header />
+      <Header />
           <div
             style={{
               marginTop: '60px',
@@ -135,17 +135,18 @@ function PostDetailPage() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
             {/* Left sidebar content */}
           </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-            <StoryDetail story={story} />
-            <div style={{ marginTop: '8px' }}>
-              <CommentSection
-                storyId={story.id}
-                commentCount={story.comment_count}
-                compact={false}
-                onComment={handleRefresh}
-              />
-            </div>
-            {!isAuthenticated && (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0px' }}>
+        <StoryDetail story={story} />
+            <div style={{ marginTop: '0px', paddingTop: '16px' }}>
+          <CommentSection
+            storyId={story.id}
+            storyAuthorId={story.user_id}
+            commentCount={story.comment_count}
+            compact={false}
+            onComment={handleRefresh}
+          />
+        </div>
+        {!isAuthenticated && (
               <div
                 style={{
                   marginTop: '16px',
