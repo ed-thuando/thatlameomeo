@@ -71,7 +71,7 @@ function StoryDetail({ story, onRefresh }: StoryDetailProps) {
         </div>
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
-            <strong style={{ color: 'var(--text-color, #ffffff)', fontSize: '14px' }}>
+            <strong style={{ color: '#ffffff', fontSize: '14px' }}>
               {story.display_name || story.username || 'Unknown User'}
             </strong>
             <span style={{ color: 'var(--secondary-text, #a8a8a8)', fontSize: '12px' }}>
@@ -104,7 +104,7 @@ function StoryDetail({ story, onRefresh }: StoryDetailProps) {
         style={{
           marginBottom: '12px',
           whiteSpace: 'pre-wrap',
-          color: 'var(--text-color, #ffffff)',
+          color: '#ffffff',
           fontSize: '16px',
           lineHeight: '1.5',
         }}

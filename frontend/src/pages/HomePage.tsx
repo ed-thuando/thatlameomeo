@@ -24,9 +24,9 @@ function HomePage() {
   }
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', backgroundColor: 'var(--background-color, #000000)' }}>
+    <div style={{ display: 'flex', minHeight: '100vh', backgroundColor: '#000000' }}>
       <Sidebar />
-      <div style={{ marginLeft: '72px', width: '100%' }}>
+      <div style={{ marginLeft: '72px', width: '100%', backgroundColor: '#000000' }}>
         <Header />
         <div
           style={{
@@ -38,6 +38,7 @@ function HomePage() {
             maxWidth: '1200px',
             marginLeft: 'auto',
             marginRight: 'auto',
+            backgroundColor: '#000000',
           }}
         >
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>

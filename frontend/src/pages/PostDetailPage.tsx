@@ -63,11 +63,11 @@ function PostDetailPage() {
 
   if (isLoading) {
     return (
-      <div style={{ display: 'flex', minHeight: '100vh', backgroundColor: 'var(--background-color, #000000)' }}>
+      <div style={{ display: 'flex', minHeight: '100vh', backgroundColor: '#000000' }}>
         <Sidebar />
-        <div style={{ marginLeft: '72px', width: '100%' }}>
+        <div style={{ marginLeft: '72px', width: '100%', backgroundColor: '#000000' }}>
           <Header />
-          <div style={{ marginTop: '60px', padding: '24px', color: 'var(--text-color, #ffffff)' }}>
+          <div style={{ marginTop: '60px', padding: '24px', color: '#ffffff' }}>
             Loading story...
           </div>
         </div>
@@ -77,7 +77,7 @@ function PostDetailPage() {
 
   if (error || !story) {
     return (
-      <div style={{ display: 'flex', minHeight: '100vh', backgroundColor: 'var(--background-color, #000000)' }}>
+      <div style={{ display: 'flex', minHeight: '100vh', backgroundColor: '#000000' }}>
         <Sidebar />
         <div style={{ marginLeft: '72px', width: '100%' }}>
           <Header />
@@ -117,20 +117,21 @@ function PostDetailPage() {
   return (
     <div style={{ display: 'flex', minHeight: '100vh', backgroundColor: 'var(--background-color, #000000)' }}>
       <Sidebar />
-      <div style={{ marginLeft: '72px', width: '100%' }}>
-        <Header />
-        <div
-          style={{
-            marginTop: '60px',
-            display: 'grid',
-            gridTemplateColumns: '1fr 600px 1fr',
-            gap: '24px',
-            padding: '24px',
-            maxWidth: '1200px',
-            marginLeft: 'auto',
-            marginRight: 'auto',
-          }}
-        >
+        <div style={{ marginLeft: '72px', width: '100%', backgroundColor: '#000000' }}>
+          <Header />
+          <div
+            style={{
+              marginTop: '60px',
+              display: 'grid',
+              gridTemplateColumns: '1fr 600px 1fr',
+              gap: '24px',
+              padding: '24px',
+              maxWidth: '1200px',
+              marginLeft: 'auto',
+              marginRight: 'auto',
+              backgroundColor: '#000000',
+            }}
+          >
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
             {/* Left sidebar content */}
           </div>

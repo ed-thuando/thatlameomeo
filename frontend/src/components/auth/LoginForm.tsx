@@ -54,10 +54,11 @@ function LoginForm({ onSubmit, error, isLoading }: LoginFormProps) {
           onChange={(e) => setUsername(e.target.value)}
           disabled={isLoading}
           required
+          placeholder="Enter your username"
           style={{
             width: '100%',
             padding: '12px',
-            backgroundColor: 'var(--background-color, #000000)',
+            backgroundColor: 'var(--card-bg, #1a1a1a)',
             border: '1px solid var(--border-color, #262626)',
             borderRadius: '8px',
             color: 'var(--text-color, #ffffff)',
@@ -86,10 +87,11 @@ function LoginForm({ onSubmit, error, isLoading }: LoginFormProps) {
           onChange={(e) => setPassword(e.target.value)}
           disabled={isLoading}
           required
+          placeholder="Enter your password"
           style={{
             width: '100%',
             padding: '12px',
-            backgroundColor: 'var(--background-color, #000000)',
+            backgroundColor: 'var(--card-bg, #1a1a1a)',
             border: '1px solid var(--border-color, #262626)',
             borderRadius: '8px',
             color: 'var(--text-color, #ffffff)',
@@ -104,7 +106,7 @@ function LoginForm({ onSubmit, error, isLoading }: LoginFormProps) {
         style={{
           width: '100%',
           backgroundColor: username.trim() && password.trim() ? 'var(--primary-color, #ffffff)' : 'var(--button-disabled-bg, #333)',
-          color: username.trim() && password.trim() ? '#000000' : 'var(--secondary-text, #666)',
+          color: username.trim() && password.trim() ? '#000000' : '#a8a8a8',
           border: 'none',
           padding: '12px',
           borderRadius: '8px',

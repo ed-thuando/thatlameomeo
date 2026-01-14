@@ -35,7 +35,7 @@ function LoginPage() {
         alignItems: 'center',
         justifyContent: 'center',
         minHeight: '100vh',
-        backgroundColor: 'var(--background-color, #000000)',
+        backgroundColor: '#000000',
         padding: '24px',
       }}
     >
@@ -55,7 +55,7 @@ function LoginPage() {
             alt="Sad Cat Logo"
             style={{ width: '64px', height: '64px', marginBottom: '16px' }}
           />
-          <h1 style={{ margin: 0, color: 'var(--text-color, #ffffff)', fontSize: '28px' }}>
+          <h1 style={{ margin: 0, color: '#ffffff', fontSize: '28px', fontWeight: 600 }}>
             Thatlameomeo
           </h1>
         </div>

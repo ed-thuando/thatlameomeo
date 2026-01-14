@@ -43,7 +43,7 @@ function Header() {
           margin: 0,
           fontSize: '24px',
           fontWeight: 600,
-          color: 'var(--text-color, #ffffff)',
+          color: '#ffffff',
         }}
       >
         {getPageTitle()}
@@ -54,8 +54,8 @@ function Header() {
           onClick={logout}
           style={{
             background: 'none',
-            border: '1px solid var(--border-color, #262626)',
-            color: 'var(--text-color, #ffffff)',
+            border: '1px solid #262626',
+            color: '#ffffff',
             padding: '8px 16px',
             borderRadius: '8px',
             cursor: 'pointer',

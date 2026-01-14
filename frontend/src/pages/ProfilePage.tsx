@@ -106,9 +106,9 @@ function ProfilePage() {
 
   if (error && !profile) {
     return (
-      <div style={{ display: 'flex', minHeight: '100vh', backgroundColor: 'var(--background-color, #000000)' }}>
+      <div style={{ display: 'flex', minHeight: '100vh', backgroundColor: '#000000' }}>
         <Sidebar />
-        <div style={{ marginLeft: '72px', width: '100%' }}>
+        <div style={{ marginLeft: '72px', width: '100%', backgroundColor: '#000000' }}>
           <Header />
           <div style={{ marginTop: '60px', padding: '24px', color: '#ff4444' }}>{error}</div>
         </div>
@@ -117,9 +117,9 @@ function ProfilePage() {
   }
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', backgroundColor: 'var(--background-color, #000000)' }}>
+    <div style={{ display: 'flex', minHeight: '100vh', backgroundColor: '#000000' }}>
       <Sidebar />
-      <div style={{ marginLeft: '72px', width: '100%' }}>
+      <div style={{ marginLeft: '72px', width: '100%', backgroundColor: '#000000' }}>
         <Header />
         <div
           style={{
@@ -131,6 +131,7 @@ function ProfilePage() {
             maxWidth: '1200px',
             marginLeft: 'auto',
             marginRight: 'auto',
+            backgroundColor: '#000000',
           }}
         >
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>

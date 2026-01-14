@@ -75,19 +75,66 @@ function StoryFeed({ refreshKey, onArchive, onDelete }: StoryFeedProps) {
 
   if (error) {
     return (
-      <div>
-        <div style={{ color: 'red' }}>{error}</div>
-        <button onClick={handleRefresh}>Retry</button>
+      <div
+        style={{
+          backgroundColor: 'var(--card-bg, #1a1a1a)',
+          border: '1px solid var(--border-color, #262626)',
+          borderRadius: '12px',
+          padding: '16px',
+        }}
+      >
+        <div style={{ color: '#ff4444', marginBottom: '12px' }}>{error}</div>
+        <button
+          onClick={handleRefresh}
+          style={{
+            backgroundColor: 'var(--primary-color, #ffffff)',
+            color: '#000000',
+            border: 'none',
+            padding: '8px 16px',
+            borderRadius: '8px',
+            cursor: 'pointer',
+            fontSize: '14px',
+            fontWeight: 600,
+          }}
+        >
+          Retry
+        </button>
       </div>
     )
   }
 
   if (isLoading && stories.length === 0) {
-    return <div>Loading stories...</div>
+    return (
+      <div
+        style={{
+          backgroundColor: 'var(--card-bg, #1a1a1a)',
+          border: '1px solid var(--border-color, #262626)',
+          borderRadius: '12px',
+          padding: '16px',
+          color: '#ffffff',
+          textAlign: 'center',
+        }}
+      >
+        Loading stories...
+      </div>
+    )
   }
 
   if (stories.length === 0) {
-    return <div>No stories yet. Be the first to share!</div>
+    return (
+      <div
+        style={{
+          backgroundColor: 'var(--card-bg, #1a1a1a)',
+          border: '1px solid var(--border-color, #262626)',
+          borderRadius: '12px',
+          padding: '24px',
+          textAlign: 'center',
+          color: 'var(--secondary-text, #a8a8a8)',
+        }}
+      >
+        No stories yet. Be the first to share!
+      </div>
+    )
   }
 
   return (
@@ -109,7 +156,7 @@ function StoryFeed({ refreshKey, onArchive, onDelete }: StoryFeedProps) {
             style={{
               backgroundColor: 'var(--card-bg, #1a1a1a)',
               border: '1px solid var(--border-color, #262626)',
-              color: 'var(--text-color, #ffffff)',
+              color: '#ffffff',
               padding: '12px 24px',
               borderRadius: '8px',
               cursor: isLoading ? 'not-allowed' : 'pointer',

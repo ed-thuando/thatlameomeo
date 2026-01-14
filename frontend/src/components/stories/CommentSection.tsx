@@ -136,11 +136,23 @@ function CommentSection({
             cursor: 'pointer',
             display: 'flex',
             alignItems: 'center',
-            gap: '4px',
+            gap: '6px',
+            padding: '4px 8px',
+            borderRadius: '8px',
+            color: 'var(--secondary-text, #a8a8a8)',
+            transition: 'background-color 0.2s',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.backgroundColor = 'var(--button-hover-bg, #1f1f1f)'
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.backgroundColor = 'transparent'
           }}
         >
-          <span>💬</span>
-          <span>{commentCount} {commentCount === 1 ? 'comment' : 'comments'}</span>
+          <span style={{ fontSize: '20px' }}>💬</span>
+          <span style={{ fontSize: '14px', color: 'var(--secondary-text, #a8a8a8)' }}>
+            {commentCount} {commentCount === 1 ? 'comment' : 'comments'}
+          </span>
         </button>
       </div>
 
@@ -153,10 +165,35 @@ function CommentSection({
                 onChange={(e) => setNewComment(e.target.value)}
                 placeholder="Write a comment..."
                 rows={3}
-                style={{ width: '100%', marginBottom: '8px' }}
+                style={{
+                  width: '100%',
+                  marginBottom: '8px',
+                  backgroundColor: 'var(--card-bg, #1a1a1a)',
+                  border: '1px solid var(--border-color, #262626)',
+                  borderRadius: '8px',
+                  color: '#ffffff',
+                  padding: '12px',
+                  fontSize: '14px',
+                  fontFamily: 'inherit',
+                  resize: 'none',
+                  outline: 'none',
+                }}
                 disabled={isLoading}
               />
-              <button type="submit" disabled={isLoading || !newComment.trim()}>
+              <button
+                type="submit"
+                disabled={isLoading || !newComment.trim()}
+                style={{
+                  backgroundColor: newComment.trim() ? 'var(--primary-color, #ffffff)' : 'var(--button-disabled-bg, #333)',
+                  color: newComment.trim() ? '#000000' : '#a8a8a8',
+                  border: 'none',
+                  padding: '8px 16px',
+                  borderRadius: '8px',
+                  cursor: newComment.trim() && !isLoading ? 'pointer' : 'not-allowed',
+                  fontSize: '14px',
+                  fontWeight: 600,
+                }}
+              >
                 {isLoading ? 'Posting...' : 'Post Comment'}
               </button>
             </form>
@@ -167,19 +204,24 @@ function CommentSection({
               <div
                 key={comment.id}
                 style={{
-                  padding: '8px',
+                  padding: '12px',
                   marginBottom: '8px',
-                  backgroundColor: '#f5f5f5',
-                  borderRadius: '4px',
+                  backgroundColor: 'var(--card-bg, #1a1a1a)',
+                  border: '1px solid var(--border-color, #262626)',
+                  borderRadius: '8px',
                 }}
               >
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
-                  <strong>{comment.username || 'Unknown User'}</strong>
-                  <span style={{ color: '#666', fontSize: '0.9em' }}>
+                  <strong style={{ color: 'var(--text-color, #ffffff)', fontSize: '14px' }}>
+                    {comment.username || 'Unknown User'}
+                  </strong>
+                  <span style={{ color: 'var(--secondary-text, #a8a8a8)', fontSize: '12px' }}>
                     {formatDate(comment.created_at)}
                   </span>
                 </div>
-                <div>{comment.content}</div>
+                <div style={{ color: 'var(--text-color, #ffffff)', fontSize: '14px' }}>
+                  {comment.content}
+                </div>
               </div>
             ))}
           </div>

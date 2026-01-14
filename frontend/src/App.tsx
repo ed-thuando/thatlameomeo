@@ -15,7 +15,20 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { isAuthenticated, isLoading } = useAuth()
 
   if (isLoading) {
-    return <div>Loading...</div>
+    return (
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          minHeight: '100vh',
+          backgroundColor: 'var(--background-color, #000000)',
+          color: 'var(--text-color, #ffffff)',
+        }}
+      >
+        Loading...
+      </div>
+    )
   }
 
   if (!isAuthenticated) {
@@ -55,14 +68,53 @@ function ShareRoute() {
   }
 
   if (isLoading) {
-    return <div>Loading...</div>
+    return (
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          minHeight: '100vh',
+          backgroundColor: 'var(--background-color, #000000)',
+          color: 'var(--text-color, #ffffff)',
+        }}
+      >
+        Loading...
+      </div>
+    )
   }
 
   if (error) {
     return (
-      <div>
-        <div style={{ color: 'red' }}>{error}</div>
-        <button onClick={() => navigate('/')}>Go Home</button>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          minHeight: '100vh',
+          backgroundColor: 'var(--background-color, #000000)',
+          color: 'var(--text-color, #ffffff)',
+          padding: '24px',
+          gap: '16px',
+        }}
+      >
+        <div style={{ color: '#ff4444', fontSize: '16px' }}>{error}</div>
+        <button
+          onClick={() => navigate('/')}
+          style={{
+            backgroundColor: 'var(--card-bg, #1a1a1a)',
+            border: '1px solid var(--border-color, #262626)',
+            color: 'var(--text-color, #ffffff)',
+            padding: '12px 24px',
+            borderRadius: '8px',
+            cursor: 'pointer',
+            fontSize: '14px',
+            fontWeight: 600,
+          }}
+        >
+          Go Home
+        </button>
       </div>
     )
   }
@@ -74,7 +126,20 @@ function App() {
   const { isLoading: themeLoading } = useTheme()
 
   if (themeLoading) {
-    return <div>Loading...</div>
+    return (
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          minHeight: '100vh',
+          backgroundColor: 'var(--background-color, #000000)',
+          color: 'var(--text-color, #ffffff)',
+        }}
+      >
+        Loading...
+      </div>
+    )
   }
 
   return (

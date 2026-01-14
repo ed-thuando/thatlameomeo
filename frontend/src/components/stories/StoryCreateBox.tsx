@@ -126,7 +126,7 @@ function StoryCreateBox({ onStoryCreated }: StoryCreateBoxProps) {
               width: '100%',
               backgroundColor: 'transparent',
               border: 'none',
-              color: 'var(--text-color, #ffffff)',
+              color: '#ffffff',
               fontSize: '16px',
               fontFamily: 'inherit',
               resize: 'none',
@@ -151,7 +151,7 @@ function StoryCreateBox({ onStoryCreated }: StoryCreateBoxProps) {
                 gap: '6px',
                 cursor: 'pointer',
                 fontSize: '14px',
-                color: 'var(--text-color, #ffffff)',
+                color: '#ffffff',
               }}
             >
               <input
@@ -171,7 +171,7 @@ function StoryCreateBox({ onStoryCreated }: StoryCreateBoxProps) {
                 gap: '6px',
                 cursor: 'pointer',
                 fontSize: '14px',
-                color: 'var(--text-color, #ffffff)',
+                color: '#ffffff',
               }}
             >
               <input
@@ -189,7 +189,7 @@ function StoryCreateBox({ onStoryCreated }: StoryCreateBoxProps) {
             <span
               style={{
                 fontSize: '12px',
-                color: 'var(--secondary-text, #a8a8a8)',
+                color: '#a8a8a8',
               }}
             >
               {content.length} / {MAX_CONTENT_LENGTH}
@@ -199,7 +199,7 @@ function StoryCreateBox({ onStoryCreated }: StoryCreateBoxProps) {
               disabled={isLoading || !content.trim()}
               style={{
                 backgroundColor: content.trim() ? 'var(--primary-color, #ffffff)' : 'var(--button-disabled-bg, #333)',
-                color: content.trim() ? '#000000' : 'var(--secondary-text, #666)',
+                color: content.trim() ? '#000000' : '#a8a8a8',
                 border: 'none',
                 padding: '8px 16px',
                 borderRadius: '8px',

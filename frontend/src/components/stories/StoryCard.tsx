@@ -112,7 +112,7 @@ function StoryCard({
         </div>
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
-            <strong style={{ color: 'var(--text-color, #ffffff)', fontSize: '14px' }}>
+            <strong style={{ color: '#ffffff', fontSize: '14px' }}>
               {story.username || 'Unknown User'}
             </strong>
             {story.daily_meomeo_score !== undefined && (
@@ -147,7 +147,7 @@ function StoryCard({
         style={{
           marginBottom: '12px',
           whiteSpace: 'pre-wrap',
-          color: 'var(--text-color, #ffffff)',
+          color: '#ffffff',
           fontSize: '14px',
           lineHeight: '1.5',
         }}
@@ -195,7 +195,7 @@ function StoryCard({
                 fontSize: '12px',
                 background: 'none',
                 border: '1px solid var(--border-color, #262626)',
-                color: 'var(--text-color, #ffffff)',
+                color: '#ffffff',
                 padding: '4px 12px',
                 borderRadius: '6px',
                 cursor: 'pointer',
@@ -228,7 +228,7 @@ function StoryCard({
                       fontSize: '12px',
                       background: 'none',
                       border: '1px solid var(--border-color, #262626)',
-                      color: 'var(--text-color, #ffffff)',
+                      color: '#ffffff',
                       padding: '4px 12px',
                       borderRadius: '6px',
                       cursor: 'pointer',
