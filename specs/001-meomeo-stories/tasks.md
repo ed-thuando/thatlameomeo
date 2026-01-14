@@ -22,16 +22,16 @@
 
 **Purpose**: Project initialization and basic structure
 
-- [ ] T001 Create project structure per implementation plan (frontend/, netlify/functions/, migrations/)
-- [ ] T002 Initialize React + Vite project in frontend/ with TypeScript configuration
-- [ ] T003 [P] Initialize Netlify Functions project structure in netlify/functions/
-- [ ] T004 [P] Configure ESLint and Prettier for frontend in frontend/
-- [ ] T005 [P] Configure TypeScript for Netlify Functions in netlify/functions/
-- [ ] T006 [P] Setup Vitest for React component testing in frontend/
-- [ ] T007 [P] Setup Node.js test framework for API function testing in netlify/functions/
-- [ ] T008 Create netlify.toml configuration file at repository root
-- [ ] T009 [P] Create .env.local template file with placeholder environment variables
-- [ ] T010 [P] Create sad cat logo SVG asset in frontend/public/sad-cat-logo.svg
+- [x] T001 Create project structure per implementation plan (frontend/, netlify/functions/, migrations/)
+- [x] T002 Initialize React + Vite project in frontend/ with TypeScript configuration
+- [x] T003 [P] Initialize Netlify Functions project structure in netlify/functions/
+- [x] T004 [P] Configure ESLint and Prettier for frontend in frontend/
+- [x] T005 [P] Configure TypeScript for Netlify Functions in netlify/functions/
+- [x] T006 [P] Setup Vitest for React component testing in frontend/
+- [x] T007 [P] Setup Node.js test framework for API function testing in netlify/functions/
+- [x] T008 Create netlify.toml configuration file at repository root
+- [x] T009 [P] Create .env.local template file with placeholder environment variables
+- [x] T010 [P] Create sad cat logo SVG asset in frontend/public/sad-cat-logo.svg
 
 ---
 
@@ -41,16 +41,16 @@
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T011 Setup Turso database connection utility in netlify/functions/utils/db.ts
-- [ ] T012 Create database migration file migrations/001_initial_schema.sql with users and stories tables
-- [ ] T013 [P] Implement JWT authentication utilities in netlify/functions/utils/auth.ts (sign, verify, extract user_id)
-- [ ] T014 [P] Create API service layer in frontend/src/services/api.ts for making HTTP requests to Netlify Functions
-- [ ] T015 [P] Create authentication service in frontend/src/services/auth.ts for JWT token management
-- [ ] T016 [P] Create JWT utility functions in frontend/src/utils/jwt.ts for token storage and retrieval
-- [ ] T017 [P] Setup React Router in frontend/src/App.tsx with route structure
-- [ ] T018 [P] Create base error handling infrastructure in netlify/functions/utils/ (error response helpers)
-- [ ] T019 [P] Create base error handling in frontend/src/services/api.ts (network errors, API errors)
-- [ ] T020 Setup environment variable configuration for local development (.env.local)
+- [x] T011 Setup Turso database connection utility in netlify/functions/utils/db.ts
+- [x] T012 Create database migration file migrations/001_initial_schema.sql with users and stories tables
+- [x] T013 [P] Implement JWT authentication utilities in netlify/functions/utils/auth.ts (sign, verify, extract user_id)
+- [x] T014 [P] Create API service layer in frontend/src/services/api.ts for making HTTP requests to Netlify Functions
+- [x] T015 [P] Create authentication service in frontend/src/services/auth.ts for JWT token management
+- [x] T016 [P] Create JWT utility functions in frontend/src/utils/jwt.ts for token storage and retrieval
+- [x] T017 [P] Setup React Router in frontend/src/App.tsx with route structure
+- [x] T018 [P] Create base error handling infrastructure in netlify/functions/utils/ (error response helpers)
+- [x] T019 [P] Create base error handling in frontend/src/services/api.ts (network errors, API errors)
+- [x] T020 Setup environment variable configuration for local development (.env.local)
 
 **Checkpoint**: Foundation ready - user story implementation can now begin in parallel
 
@@ -64,18 +64,18 @@
 
 ### Implementation for User Story 1
 
-- [ ] T021 [US1] Create LoginForm component in frontend/src/components/auth/LoginForm.tsx with username and password fields
-- [ ] T022 [US1] Create LoginPage component in frontend/src/pages/LoginPage.tsx that uses LoginForm
-- [ ] T023 [US1] Implement login Netlify Function in netlify/functions/login.ts with username/password validation
-- [ ] T024 [US1] Add password hash verification logic in netlify/functions/login.ts using bcrypt
-- [ ] T025 [US1] Implement JWT token generation in netlify/functions/login.ts with user ID in payload
-- [ ] T026 [US1] Add login API call in frontend/src/services/auth.ts to POST to /.netlify/functions/login
-- [ ] T027 [US1] Implement token storage in localStorage in frontend/src/services/auth.ts after successful login
-- [ ] T028 [US1] Create useAuth hook in frontend/src/hooks/useAuth.ts for authentication state management
-- [ ] T029 [US1] Add protected route logic in frontend/src/App.tsx to redirect unauthenticated users to login
-- [ ] T030 [US1] Add automatic token validation on app load in frontend/src/hooks/useAuth.ts
-- [ ] T031 [US1] Implement error handling for invalid credentials in frontend/src/components/auth/LoginForm.tsx
-- [ ] T032 [US1] Add redirect to home page after successful login in frontend/src/pages/LoginPage.tsx
+- [x] T021 [US1] Create LoginForm component in frontend/src/components/auth/LoginForm.tsx with username and password fields
+- [x] T022 [US1] Create LoginPage component in frontend/src/pages/LoginPage.tsx that uses LoginForm
+- [x] T023 [US1] Implement login Netlify Function in netlify/functions/login.ts with username/password validation
+- [x] T024 [US1] Add password hash verification logic in netlify/functions/login.ts using bcrypt
+- [x] T025 [US1] Implement JWT token generation in netlify/functions/login.ts with user ID in payload
+- [x] T026 [US1] Add login API call in frontend/src/services/auth.ts to POST to /.netlify/functions/login
+- [x] T027 [US1] Implement token storage in localStorage in frontend/src/services/auth.ts after successful login
+- [x] T028 [US1] Create useAuth hook in frontend/src/hooks/useAuth.ts for authentication state management
+- [x] T029 [US1] Add protected route logic in frontend/src/App.tsx to redirect unauthenticated users to login
+- [x] T030 [US1] Add automatic token validation on app load in frontend/src/hooks/useAuth.ts
+- [x] T031 [US1] Implement error handling for invalid credentials in frontend/src/components/auth/LoginForm.tsx
+- [x] T032 [US1] Add redirect to home page after successful login in frontend/src/pages/LoginPage.tsx
 
 **Checkpoint**: At this point, User Story 1 should be fully functional and testable independently
 
@@ -89,16 +89,16 @@
 
 ### Implementation for User Story 2
 
-- [ ] T033 [US2] Create StoryCreateBox component in frontend/src/components/stories/StoryCreateBox.tsx with textarea and visibility toggle
-- [ ] T034 [US2] Add story creation form validation in frontend/src/components/stories/StoryCreateBox.tsx (non-empty content, max length)
-- [ ] T035 [US2] Implement create story Netlify Function endpoint in netlify/functions/stories.ts (POST handler)
-- [ ] T036 [US2] Add JWT token validation in netlify/functions/stories.ts for POST endpoint
-- [ ] T037 [US2] Implement story insertion into database in netlify/functions/stories.ts with user_id from JWT
-- [ ] T038 [US2] Add story creation API call in frontend/src/services/api.ts to POST to /.netlify/functions/stories
-- [ ] T039 [US2] Implement success handling after story creation in frontend/src/components/stories/StoryCreateBox.tsx
-- [ ] T040 [US2] Add error handling for story creation failures in frontend/src/components/stories/StoryCreateBox.tsx
-- [ ] T041 [US2] Create daily score calculation utility in netlify/functions/utils/scores.ts for calculating today's MeoMeo score
-- [ ] T042 [US2] Update story creation to calculate and return daily MeoMeo score in netlify/functions/stories.ts
+- [x] T033 [US2] Create StoryCreateBox component in frontend/src/components/stories/StoryCreateBox.tsx with textarea and visibility toggle
+- [x] T034 [US2] Add story creation form validation in frontend/src/components/stories/StoryCreateBox.tsx (non-empty content, max length)
+- [x] T035 [US2] Implement create story Netlify Function endpoint in netlify/functions/stories.ts (POST handler)
+- [x] T036 [US2] Add JWT token validation in netlify/functions/stories.ts for POST endpoint
+- [x] T037 [US2] Implement story insertion into database in netlify/functions/stories.ts with user_id from JWT
+- [x] T038 [US2] Add story creation API call in frontend/src/services/api.ts to POST to /.netlify/functions/stories
+- [x] T039 [US2] Implement success handling after story creation in frontend/src/components/stories/StoryCreateBox.tsx
+- [x] T040 [US2] Add error handling for story creation failures in frontend/src/components/stories/StoryCreateBox.tsx
+- [x] T041 [US2] Create daily score calculation utility in netlify/functions/utils/scores.ts for calculating today's MeoMeo score
+- [x] T042 [US2] Update story creation to calculate and return daily MeoMeo score in netlify/functions/stories.ts
 
 **Checkpoint**: At this point, User Stories 1 AND 2 should both work independently
 
@@ -112,41 +112,41 @@
 
 ### Database Updates for User Story 3
 
-- [ ] T043 [US3] Create likes table migration in migrations/002_add_likes_comments.sql
-- [ ] T044 [US3] Create comments table migration in migrations/002_add_likes_comments.sql
-- [ ] T045 [US3] Add avatar_url and display_name columns to users table in migrations/002_add_likes_comments.sql
-- [ ] T046 [US3] Add archived column to stories table in migrations/002_add_likes_comments.sql
+- [x] T043 [US3] Create likes table migration in migrations/002_add_likes_comments.sql
+- [x] T044 [US3] Create comments table migration in migrations/002_add_likes_comments.sql
+- [x] T045 [US3] Add avatar_url and display_name columns to users table in migrations/002_add_likes_comments.sql
+- [x] T046 [US3] Add archived column to stories table in migrations/002_add_likes_comments.sql
 
 ### Implementation for User Story 3
 
-- [ ] T047 [US3] Create StoryCard component in frontend/src/components/stories/StoryCard.tsx to display story content, author, timestamp
-- [ ] T048 [US3] Create StoryFeed component in frontend/src/components/stories/StoryFeed.tsx to display list of public stories
-- [ ] T049 [US3] Implement get public stories Netlify Function endpoint in netlify/functions/stories.ts (GET handler with pagination)
-- [ ] T050 [US3] Add JWT token validation in netlify/functions/stories.ts for GET endpoint
-- [ ] T051 [US3] Implement public stories query in netlify/functions/stories.ts (filter by visibility='public', order by created_at DESC)
-- [ ] T052 [US3] Add get public stories API call in frontend/src/services/api.ts to GET /.netlify/functions/stories
-- [ ] T053 [US3] Create LikeButton component in frontend/src/components/stories/LikeButton.tsx with like/unlike functionality
-- [ ] T054 [US3] Implement like Netlify Function in netlify/functions/likes.ts (POST to like, DELETE to unlike)
-- [ ] T055 [US3] Add like count increment logic in netlify/functions/likes.ts when post is liked
-- [ ] T056 [US3] Implement daily MeoMeo score increment for post author when liked in netlify/functions/likes.ts
-- [ ] T057 [US3] Add like API calls in frontend/src/services/api.ts to POST/DELETE /.netlify/functions/likes
-- [ ] T058 [US3] Create CommentSection component in frontend/src/components/stories/CommentSection.tsx with comment list and add comment form
-- [ ] T059 [US3] Implement comment Netlify Function in netlify/functions/comments.ts (POST to create comment)
-- [ ] T060 [US3] Add comment count increment logic in netlify/functions/comments.ts when comment is created
-- [ ] T061 [US3] Implement daily MeoMeo score increment for post author when commented in netlify/functions/comments.ts
-- [ ] T062 [US3] Add comment API calls in frontend/src/services/api.ts to POST /.netlify/functions/comments
-- [ ] T063 [US3] Create ShareButton component in frontend/src/components/stories/ShareButton.tsx to generate shareable links
-- [ ] T064 [US3] Create share utility in frontend/src/utils/share.ts to generate shareable post URLs
-- [ ] T065 [US3] Implement share Netlify Function in netlify/functions/shares.ts to generate and validate share tokens
-- [ ] T066 [US3] Create UserList component in frontend/src/components/users/UserList.tsx to display users with daily MeoMeo scores
-- [ ] T067 [US3] Implement get all users Netlify Function endpoint in netlify/functions/users.ts (GET handler with sorting)
-- [ ] T068 [US3] Add daily MeoMeo score calculation in netlify/functions/users.ts (posts today + likes received today + comments received today)
-- [ ] T069 [US3] Add get users API call in frontend/src/services/api.ts to GET /.netlify/functions/users
-- [ ] T070 [US3] Create HomePage component in frontend/src/pages/HomePage.tsx with StoryFeed, StoryCreateBox, and UserList sections
-- [ ] T071 [US3] Create Header component in frontend/src/components/layout/Header.tsx with sad cat logo and navigation
-- [ ] T072 [US3] Add home icon (sad cat logo) navigation in frontend/src/components/layout/Header.tsx to navigate to feed
-- [ ] T073 [US3] Create useDailyScore hook in frontend/src/hooks/useDailyScore.ts for fetching and displaying daily scores
-- [ ] T074 [US3] Integrate daily MeoMeo score display in frontend/src/components/stories/StoryCard.tsx alongside author info
+- [x] T047 [US3] Create StoryCard component in frontend/src/components/stories/StoryCard.tsx to display story content, author, timestamp
+- [x] T048 [US3] Create StoryFeed component in frontend/src/components/stories/StoryFeed.tsx to display list of public stories
+- [x] T049 [US3] Implement get public stories Netlify Function endpoint in netlify/functions/stories.ts (GET handler with pagination)
+- [x] T050 [US3] Add JWT token validation in netlify/functions/stories.ts for GET endpoint
+- [x] T051 [US3] Implement public stories query in netlify/functions/stories.ts (filter by visibility='public', order by created_at DESC)
+- [x] T052 [US3] Add get public stories API call in frontend/src/services/api.ts to GET /.netlify/functions/stories
+- [x] T053 [US3] Create LikeButton component in frontend/src/components/stories/LikeButton.tsx with like/unlike functionality
+- [x] T054 [US3] Implement like Netlify Function in netlify/functions/likes.ts (POST to like, DELETE to unlike)
+- [x] T055 [US3] Add like count increment logic in netlify/functions/likes.ts when post is liked
+- [x] T056 [US3] Implement daily MeoMeo score increment for post author when liked in netlify/functions/likes.ts
+- [x] T057 [US3] Add like API calls in frontend/src/services/api.ts to POST/DELETE /.netlify/functions/likes
+- [x] T058 [US3] Create CommentSection component in frontend/src/components/stories/CommentSection.tsx with comment list and add comment form
+- [x] T059 [US3] Implement comment Netlify Function in netlify/functions/comments.ts (POST to create comment)
+- [x] T060 [US3] Add comment count increment logic in netlify/functions/comments.ts when comment is created
+- [x] T061 [US3] Implement daily MeoMeo score increment for post author when commented in netlify/functions/comments.ts
+- [x] T062 [US3] Add comment API calls in frontend/src/services/api.ts to POST /.netlify/functions/comments
+- [x] T063 [US3] Create ShareButton component in frontend/src/components/stories/ShareButton.tsx to generate shareable links
+- [x] T064 [US3] Create share utility in frontend/src/utils/share.ts to generate shareable post URLs
+- [x] T065 [US3] Implement share Netlify Function in netlify/functions/shares.ts to generate and validate share tokens
+- [x] T066 [US3] Create UserList component in frontend/src/components/users/UserList.tsx to display users with daily MeoMeo scores
+- [x] T067 [US3] Implement get all users Netlify Function endpoint in netlify/functions/users.ts (GET handler with sorting)
+- [x] T068 [US3] Add daily MeoMeo score calculation in netlify/functions/users.ts (posts today + likes received today + comments received today)
+- [x] T069 [US3] Add get users API call in frontend/src/services/api.ts to GET /.netlify/functions/users
+- [x] T070 [US3] Create HomePage component in frontend/src/pages/HomePage.tsx with StoryFeed, StoryCreateBox, and UserList sections
+- [x] T071 [US3] Create Header component in frontend/src/components/layout/Header.tsx with sad cat logo and navigation
+- [x] T072 [US3] Add home icon (sad cat logo) navigation in frontend/src/components/layout/Header.tsx to navigate to feed
+- [x] T073 [US3] Create useDailyScore hook in frontend/src/hooks/useDailyScore.ts for fetching and displaying daily scores
+- [x] T074 [US3] Integrate daily MeoMeo score display in frontend/src/components/stories/StoryCard.tsx alongside author info
 
 **Checkpoint**: At this point, User Stories 1, 2, AND 3 should all work independently
 
@@ -160,22 +160,22 @@
 
 ### Implementation for User Story 4
 
-- [ ] T075 [US4] Create ProfilePage component in frontend/src/pages/ProfilePage.tsx to display user profile information
-- [ ] T076 [US4] Create AvatarEditor component in frontend/src/components/users/AvatarEditor.tsx for uploading and editing avatar
-- [ ] T077 [US4] Create DisplayNameEditor component in frontend/src/components/users/DisplayNameEditor.tsx for editing display name
-- [ ] T078 [US4] Implement get user's stories Netlify Function endpoint in netlify/functions/stories.ts (GET /stories/me handler)
-- [ ] T079 [US4] Add get user's stories API call in frontend/src/services/api.ts to GET /.netlify/functions/stories/me
-- [ ] T080 [US4] Implement update user profile Netlify Function endpoint in netlify/functions/users.ts (PUT /users/me handler)
-- [ ] T081 [US4] Add avatar and display_name update logic in netlify/functions/users.ts
-- [ ] T082 [US4] Add update profile API call in frontend/src/services/api.ts to PUT /.netlify/functions/users/me
-- [ ] T083 [US4] Implement archive story functionality in netlify/functions/stories.ts (PUT /stories/:id/archive handler)
-- [ ] T084 [US4] Add archive story API call in frontend/src/services/api.ts to PUT /.netlify/functions/stories/:id/archive
-- [ ] T085 [US4] Implement delete story functionality in netlify/functions/stories.ts (DELETE /stories/:id handler)
-- [ ] T086 [US4] Add delete story API call in frontend/src/services/api.ts to DELETE /.netlify/functions/stories/:id
-- [ ] T087 [US4] Add archive/delete buttons in frontend/src/components/stories/StoryCard.tsx for user's own posts
-- [ ] T088 [US4] Add confirmation dialog for delete action in frontend/src/components/stories/StoryCard.tsx
-- [ ] T089 [US4] Display daily MeoMeo score on profile page in frontend/src/pages/ProfilePage.tsx
-- [ ] T090 [US4] Filter archived posts from public feed in netlify/functions/stories.ts (exclude archived stories)
+- [x] T075 [US4] Create ProfilePage component in frontend/src/pages/ProfilePage.tsx to display user profile information
+- [x] T076 [US4] Create AvatarEditor component in frontend/src/components/users/AvatarEditor.tsx for uploading and editing avatar
+- [x] T077 [US4] Create DisplayNameEditor component in frontend/src/components/users/DisplayNameEditor.tsx for editing display name
+- [x] T078 [US4] Implement get user's stories Netlify Function endpoint in netlify/functions/stories.ts (GET /stories/me handler)
+- [x] T079 [US4] Add get user's stories API call in frontend/src/services/api.ts to GET /.netlify/functions/stories/me
+- [x] T080 [US4] Implement update user profile Netlify Function endpoint in netlify/functions/users.ts (PUT /users/me handler)
+- [x] T081 [US4] Add avatar and display_name update logic in netlify/functions/users.ts
+- [x] T082 [US4] Add update profile API call in frontend/src/services/api.ts to PUT /.netlify/functions/users/me
+- [x] T083 [US4] Implement archive story functionality in netlify/functions/stories.ts (PUT /stories/:id/archive handler)
+- [x] T084 [US4] Add archive story API call in frontend/src/services/api.ts to PUT /.netlify/functions/stories/:id/archive
+- [x] T085 [US4] Implement delete story functionality in netlify/functions/stories.ts (DELETE /stories/:id handler)
+- [x] T086 [US4] Add delete story API call in frontend/src/services/api.ts to DELETE /.netlify/functions/stories/:id
+- [x] T087 [US4] Add archive/delete buttons in frontend/src/components/stories/StoryCard.tsx for user's own posts
+- [x] T088 [US4] Add confirmation dialog for delete action in frontend/src/components/stories/StoryCard.tsx
+- [x] T089 [US4] Display daily MeoMeo score on profile page in frontend/src/pages/ProfilePage.tsx
+- [x] T090 [US4] Filter archived posts from public feed in netlify/functions/stories.ts (exclude archived stories)
 
 **Checkpoint**: At this point, User Stories 1, 2, 3, AND 4 should all work independently
 
@@ -189,19 +189,19 @@
 
 ### Implementation for User Story 5
 
-- [ ] T091 [US5] Create PostDetailPage component in frontend/src/pages/PostDetailPage.tsx to display single post with comments
-- [ ] T092 [US5] Create StoryDetail component in frontend/src/components/stories/StoryDetail.tsx to display full post content
-- [ ] T093 [US5] Implement get story by ID Netlify Function endpoint in netlify/functions/stories.ts (GET /stories/:id handler)
-- [ ] T094 [US5] Add get story by ID API call in frontend/src/services/api.ts to GET /.netlify/functions/stories/:id
-- [ ] T095 [US5] Implement get comments for story Netlify Function endpoint in netlify/functions/comments.ts (GET /comments?story_id=:id handler)
-- [ ] T096 [US5] Add get comments API call in frontend/src/services/api.ts to GET /.netlify/functions/comments?story_id=:id
-- [ ] T097 [US5] Integrate CommentSection component in frontend/src/pages/PostDetailPage.tsx to display and add comments
-- [ ] T098 [US5] Add route for post detail page in frontend/src/App.tsx (/post/:id)
-- [ ] T099 [US5] Implement shareable link routing in frontend/src/App.tsx to handle /share/:token routes
-- [ ] T100 [US5] Add share token validation in netlify/functions/shares.ts to resolve token to story ID
-- [ ] T101 [US5] Add home icon navigation in frontend/src/pages/PostDetailPage.tsx to navigate back to feed
-- [ ] T102 [US5] Handle unauthenticated access to public posts in frontend/src/pages/PostDetailPage.tsx (view-only mode)
-- [ ] T103 [US5] Disable like/comment actions for unauthenticated users in frontend/src/pages/PostDetailPage.tsx
+- [x] T091 [US5] Create PostDetailPage component in frontend/src/pages/PostDetailPage.tsx to display single post with comments
+- [x] T092 [US5] Create StoryDetail component in frontend/src/components/stories/StoryDetail.tsx to display full post content
+- [x] T093 [US5] Implement get story by ID Netlify Function endpoint in netlify/functions/stories.ts (GET /stories/:id handler)
+- [x] T094 [US5] Add get story by ID API call in frontend/src/services/api.ts to GET /.netlify/functions/stories/:id
+- [x] T095 [US5] Implement get comments for story Netlify Function endpoint in netlify/functions/comments.ts (GET /comments?story_id=:id handler)
+- [x] T096 [US5] Add get comments API call in frontend/src/services/api.ts to GET /.netlify/functions/comments?story_id=:id
+- [x] T097 [US5] Integrate CommentSection component in frontend/src/pages/PostDetailPage.tsx to display and add comments
+- [x] T098 [US5] Add route for post detail page in frontend/src/App.tsx (/post/:id)
+- [x] T099 [US5] Implement shareable link routing in frontend/src/App.tsx to handle /share/:token routes
+- [x] T100 [US5] Add share token validation in netlify/functions/shares.ts to resolve token to story ID
+- [x] T101 [US5] Add home icon navigation in frontend/src/pages/PostDetailPage.tsx to navigate back to feed
+- [x] T102 [US5] Handle unauthenticated access to public posts in frontend/src/pages/PostDetailPage.tsx (view-only mode)
+- [x] T103 [US5] Disable like/comment actions for unauthenticated users in frontend/src/pages/PostDetailPage.tsx
 
 **Checkpoint**: At this point, User Stories 1, 2, 3, 4, AND 5 should all work independently
 
@@ -215,18 +215,18 @@
 
 ### Implementation for User Story 6
 
-- [ ] T104 [US6] Create ThemeSelector component in frontend/src/components/theme/ThemeSelector.tsx with 3-4 cat-themed options
-- [ ] T105 [US6] Define CSS variables for each theme in frontend/src/styles/themes.css (default, orange-cat, gray-cat, calico-cat)
-- [ ] T106 [US6] Create useTheme hook in frontend/src/hooks/useTheme.ts for theme state management
-- [ ] T107 [US6] Implement theme persistence in localStorage in frontend/src/hooks/useTheme.ts
-- [ ] T108 [US6] Add theme application logic in frontend/src/hooks/useTheme.ts to update CSS variables dynamically
-- [ ] T109 [US6] Implement update theme preference Netlify Function endpoint in netlify/functions/users.ts (PUT /users/me/theme handler)
-- [ ] T110 [US6] Add update theme API call in frontend/src/services/api.ts to PUT /.netlify/functions/users/me/theme
-- [ ] T111 [US6] Integrate ThemeSelector component in frontend/src/components/layout/Header.tsx or settings area
-- [ ] T112 [US6] Add sad cat logo display in frontend/src/components/layout/Header.tsx
-- [ ] T113 [US6] Add sad cat logo to LoginPage in frontend/src/pages/LoginPage.tsx
-- [ ] T114 [US6] Ensure sad cat logo appears consistently across all pages in the app
-- [ ] T115 [US6] Load user's saved theme preference on app initialization in frontend/src/hooks/useTheme.ts
+- [x] T104 [US6] Create ThemeSelector component in frontend/src/components/theme/ThemeSelector.tsx with 3-4 cat-themed options
+- [x] T105 [US6] Define CSS variables for each theme in frontend/src/index.css (default, orange-cat, gray-cat, calico-cat)
+- [x] T106 [US6] Create useTheme hook in frontend/src/hooks/useTheme.ts for theme state management
+- [x] T107 [US6] Implement theme persistence in localStorage in frontend/src/hooks/useTheme.ts
+- [x] T108 [US6] Add theme application logic in frontend/src/hooks/useTheme.ts to update CSS variables dynamically
+- [x] T109 [US6] Implement update theme preference Netlify Function endpoint in netlify/functions/users.ts (PUT /users/me/theme handler)
+- [x] T110 [US6] Add update theme API call in frontend/src/services/api.ts to PUT /.netlify/functions/users/me/theme
+- [x] T111 [US6] Integrate ThemeSelector component in frontend/src/components/layout/Header.tsx or settings area
+- [x] T112 [US6] Add sad cat logo display in frontend/src/components/layout/Header.tsx
+- [x] T113 [US6] Add sad cat logo to LoginPage in frontend/src/pages/LoginPage.tsx
+- [x] T114 [US6] Ensure sad cat logo appears consistently across all pages in the app
+- [x] T115 [US6] Load user's saved theme preference on app initialization in frontend/src/hooks/useTheme.ts
 
 **Checkpoint**: All user stories should now be independently functional
 
