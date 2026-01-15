@@ -5,9 +5,8 @@ import {
   generateRefreshToken,
   hashRefreshToken,
 } from './utils/auth'
-import { verifyGoogleIdToken, extractGoogleUserInfo } from './utils/google'
+import { verifyGoogleIdToken } from './utils/google'
 import { createErrorResponse, createSuccessResponse, handleCors } from './utils/errors'
-import crypto from 'crypto'
 
 interface GoogleAuthRequest {
   id_token: string
@@ -139,8 +138,8 @@ export const handler: Handler = async (event) => {
 
     // Check if user exists by email (account linking)
     const userByEmailResult = await db.execute({
-      sql: 'SELECT id, username, meomeo_score, theme_preference FROM users WHERE google_email = ? OR (email = ? AND google_id IS NULL)',
-      args: [googleUserInfo.email, googleUserInfo.email],
+      sql: 'SELECT id, username, meomeo_score, theme_preference FROM users WHERE google_email = ? AND google_id IS NULL',
+      args: [googleUserInfo.email],
     })
 
     if (userByEmailResult.rows.length > 0) {
@@ -200,13 +199,18 @@ export const handler: Handler = async (event) => {
     const expiresAtISO = expiresAt.toISOString()
 
     // Create user record with onboarding session
+    // Use temporary values for username and password_hash to satisfy NOT NULL constraints
+    // These will be updated when the user completes onboarding
+    const tempUsername = `temp_${googleUserInfo.sub}` // Temporary username based on Google ID
+    const tempPasswordHash = '' // Empty password hash since user will use Google OAuth
+
     const insertResult = await db.execute({
-      sql: `INSERT INTO users (google_id, google_email, onboarding_expires_at, created_at, updated_at)
-            VALUES (?, ?, ?, datetime("now"), datetime("now"))`,
-      args: [googleUserInfo.sub, googleUserInfo.email, expiresAtISO],
+      sql: `INSERT INTO users (google_id, google_email, username, password_hash, onboarding_expires_at, created_at, updated_at)
+            VALUES (?, ?, ?, ?, ?, datetime("now"), datetime("now"))`,
+      args: [googleUserInfo.sub, googleUserInfo.email, tempUsername, tempPasswordHash, expiresAtISO],
     })
 
-    const userId = insertResult.lastInsertRowid as number
+    const userId = Number(insertResult.lastInsertRowid)
 
     // Generate session ID (use user ID as session identifier)
     const sessionId = userId.toString()
