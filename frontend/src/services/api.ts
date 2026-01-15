@@ -1,3 +1,9 @@
+import { refreshAccessToken, getRefreshToken, storeToken, storeRefreshToken, removeToken, removeRefreshToken } from './auth'
+import { isTokenExpired, getTokenExpirationTime } from '../utils/jwt'
+
+import { refreshAccessToken, getRefreshToken, storeToken, removeToken, removeRefreshToken } from './auth'
+import { isTokenExpired, getTokenExpirationTime } from '../utils/jwt'
+
 const API_BASE_URL =
   import.meta.env.VITE_NETLIFY_FUNCTIONS_URL || '/.netlify/functions'
 
@@ -27,12 +33,76 @@ function getAuthToken(): string | null {
 }
 
 /**
+ * Check if token expires soon (within 10 minutes)
+ */
+function isTokenExpiringSoon(token: string | null): boolean {
+  if (!token) return true
+  
+  try {
+    const expirationTime = getTokenExpirationTime(token)
+    if (!expirationTime) return true
+    
+    const now = Date.now()
+    const tenMinutes = 10 * 60 * 1000 // 10 minutes in milliseconds
+    return expirationTime - now < tenMinutes
+  } catch {
+    return true
+  }
+}
+
+/**
+ * Automatically refresh access token if it's expiring soon
+ */
+async function ensureValidToken(): Promise<void> {
+  const token = getAuthToken()
+  const refreshToken = getRefreshToken()
+  
+  // If no token, nothing to refresh
+  if (!token) return
+  
+  // If token is expired or expiring soon, try to refresh
+  if (isTokenExpired(token) || isTokenExpiringSoon(token)) {
+    if (!refreshToken) {
+      // No refresh token available, clear auth and redirect to login
+      removeToken()
+      removeRefreshToken()
+      // Redirect will be handled by useAuth hook
+      return
+    }
+    
+    try {
+      const response = await refreshAccessToken(refreshToken)
+      storeToken(response.access_token)
+      // Refresh token remains the same (unless rotation is implemented)
+    } catch (error) {
+      // Refresh failed, clear auth and redirect to login
+      removeToken()
+      removeRefreshToken()
+      // Redirect will be handled by useAuth hook
+      throw error
+    }
+  }
+}
+
+/**
  * Make an API request to a Netlify Function
  */
 export async function apiRequest<T>(
   endpoint: string,
   options: RequestInit = {}
 ): Promise<T> {
+  // Skip token refresh for auth endpoints to avoid infinite loops
+  const isAuthEndpoint = endpoint === '/google-auth' || endpoint === '/refresh' || endpoint === '/login'
+  
+  if (!isAuthEndpoint) {
+    try {
+      await ensureValidToken()
+    } catch (error) {
+      // If refresh fails, the error will be handled by the caller
+      // For now, we'll let the request proceed and handle 401 responses
+    }
+  }
+  
   const token = getAuthToken()
   const headers: HeadersInit = {
     'Content-Type': 'application/json',
@@ -61,6 +131,29 @@ export async function apiRequest<T>(
       )
     }
     throw error
+  }
+  
+  // If we get a 401, try to refresh token once and retry
+  if (response.status === 401 && !isAuthEndpoint) {
+    const refreshToken = getRefreshToken()
+    if (refreshToken) {
+      try {
+        const refreshResponse = await refreshAccessToken(refreshToken)
+        storeToken(refreshResponse.access_token)
+        
+        // Retry the original request with new token
+        ;(headers as any)['Authorization'] = `Bearer ${refreshResponse.access_token}`
+        response = await fetch(url, {
+          ...options,
+          headers,
+        })
+      } catch (refreshError) {
+        // Refresh failed, clear auth
+        removeToken()
+        removeRefreshToken()
+        // Let the 401 response be handled below
+      }
+    }
   }
 
   // Handle non-JSON responses

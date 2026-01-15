@@ -1,11 +1,13 @@
 import { BrowserRouter, Routes, Route, Navigate, useParams, useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
+import { GoogleOAuthProvider } from '@react-oauth/google'
 import { useAuth } from './hooks/useAuth'
 import { useTheme } from './hooks/useTheme'
 import LoginPage from './pages/LoginPage'
 import HomePage from './pages/HomePage'
 import ProfilePage from './pages/ProfilePage'
 import PostDetailPage from './pages/PostDetailPage'
+import OnboardingScreen from './components/auth/OnboardingScreen'
 import { apiGet, ApiException } from './services/api'
 
 /**
@@ -122,6 +124,31 @@ function ShareRoute() {
   return null
 }
 
+/**
+ * Onboarding route wrapper - extracts session info from location state
+ */
+function OnboardingScreenWrapper() {
+  const location = useLocation()
+  const navigate = useNavigate()
+  const sessionId = (location.state as any)?.sessionId
+  const googleUser = (location.state as any)?.googleUser
+
+  if (!sessionId) {
+    // No session ID, redirect to login
+    navigate('/login', { replace: true })
+    return null
+  }
+
+  return <OnboardingScreen sessionId={sessionId} googleUser={googleUser} />
+}
+
+/**
+ * Onboarding route component - allows access without authentication
+ */
+function OnboardingRoute({ children }: { children: React.ReactNode }) {
+  return <>{children}</>
+}
+
 function App() {
   const { isLoading: themeLoading } = useTheme()
 
@@ -142,38 +169,54 @@ function App() {
     )
   }
 
+  const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID
+
+  if (!googleClientId) {
+    console.warn('VITE_GOOGLE_CLIENT_ID environment variable is not set')
+  }
+
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/login" element={<LoginPage />} />
-        <Route
-          path="/"
-          element={
-            <ProtectedRoute>
-              <HomePage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/profile"
-          element={
-            <ProtectedRoute>
-              <ProfilePage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/post/:id"
-          element={
-            <ProtectedRoute>
-              <PostDetailPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route path="/share/:token" element={<ShareRoute />} />
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
-    </BrowserRouter>
+    <GoogleOAuthProvider clientId={googleClientId || ''}>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/login" element={<LoginPage />} />
+          <Route
+            path="/onboarding"
+            element={
+              <OnboardingRoute>
+                <OnboardingScreenWrapper />
+              </OnboardingRoute>
+            }
+          />
+          <Route
+            path="/"
+            element={
+              <ProtectedRoute>
+                <HomePage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <ProfilePage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/post/:id"
+            element={
+              <ProtectedRoute>
+                <PostDetailPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="/share/:token" element={<ShareRoute />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </BrowserRouter>
+    </GoogleOAuthProvider>
   )
 }
 

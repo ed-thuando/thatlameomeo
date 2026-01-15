@@ -464,6 +464,59 @@ async function handleUpdateTheme(
   }
 }
 
+/**
+ * GET /users/check-username - Check if username is available
+ */
+async function handleCheckUsername(
+  event: {
+    queryStringParameters: Record<string, string | null> | null
+  }
+): Promise<Response> {
+  const username = event.queryStringParameters?.username
+
+  if (!username || typeof username !== 'string') {
+    return createErrorResponse(400, 'Username is required', 'BadRequest')
+  }
+
+  // Validate username format
+  const usernameRegex = /^[a-zA-Z0-9_]{1,50}$/
+  if (!usernameRegex.test(username)) {
+    return createErrorResponse(
+      400,
+      'Username must be 1-50 characters and contain only letters, numbers, and underscores',
+      'BadRequest'
+    )
+  }
+
+  const db = getDbClient()
+
+  try {
+    // Check if username is taken (case-insensitive)
+    const result = await db.execute({
+      sql: 'SELECT id FROM users WHERE LOWER(username) = LOWER(?)',
+      args: [username],
+    })
+
+    closeDbClient()
+
+    const available = result.rows.length === 0
+
+    return createSuccessResponse({
+      available,
+      username,
+      ...(available ? {} : { message: 'Username is already taken' }),
+    })
+  } catch (error) {
+    closeDbClient()
+    console.error('Error checking username:', error)
+    return createErrorResponse(
+      500,
+      'Internal server error',
+      'InternalServerError'
+    )
+  }
+}
+
 export const handler: Handler = async (event, context) => {
   // Handle CORS preflight
   if (event.httpMethod === 'OPTIONS') {
@@ -475,6 +528,10 @@ export const handler: Handler = async (event, context) => {
   // Route to appropriate handler
   if (event.httpMethod === 'GET' && path === '/') {
     return handleGetAllUsers(event)
+  }
+
+  if (event.httpMethod === 'GET' && path === '/check-username') {
+    return handleCheckUsername(event)
   }
 
   if (event.httpMethod === 'GET' && path.match(/^\/\d+$/)) {

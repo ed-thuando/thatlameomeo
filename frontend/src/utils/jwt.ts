@@ -68,3 +68,16 @@ export function isTokenExpired(token: string): boolean {
   const expirationTime = payload.exp * 1000 // Convert to milliseconds
   return Date.now() >= expirationTime
 }
+
+/**
+ * Get token expiration time in milliseconds
+ * @param token - JWT token string
+ * @returns Expiration time in milliseconds, or null if token is invalid
+ */
+export function getTokenExpirationTime(token: string): number | null {
+  const payload = decodeToken(token)
+  if (!payload || !payload.exp) {
+    return null
+  }
+  return payload.exp * 1000 // Convert to milliseconds
+}

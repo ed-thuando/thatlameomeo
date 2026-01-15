@@ -1,14 +1,20 @@
 import { useState, FormEvent } from 'react'
+import { GoogleLogin, CredentialResponse } from '@react-oauth/google'
+import { googleAuth, storeToken, storeRefreshToken } from '../../services/auth'
 
 interface LoginFormProps {
   onSubmit: (username: string, password: string) => void
+  onGoogleAuthSuccess?: () => void
+  onGoogleAuthRequiresOnboarding?: (sessionId: string, googleUser: { email: string; name: string; picture: string }) => void
   error: string | null
   isLoading: boolean
 }
 
-function LoginForm({ onSubmit, error, isLoading }: LoginFormProps) {
+function LoginForm({ onSubmit, onGoogleAuthSuccess, onGoogleAuthRequiresOnboarding, error, isLoading }: LoginFormProps) {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+  const [googleLoading, setGoogleLoading] = useState(false)
+  const [googleError, setGoogleError] = useState<string | null>(null)
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -16,6 +22,52 @@ function LoginForm({ onSubmit, error, isLoading }: LoginFormProps) {
       return
     }
     onSubmit(username, password)
+  }
+
+  const handleGoogleSuccess = async (credentialResponse: CredentialResponse) => {
+    setGoogleLoading(true)
+    setGoogleError(null)
+    
+    if (!credentialResponse.credential) {
+      setGoogleError('No credential received from Google')
+      setGoogleLoading(false)
+      return
+    }
+
+    try {
+      const response = await googleAuth(credentialResponse.credential)
+      
+      if (response.requires_onboarding) {
+        // Handle onboarding flow
+        if (onGoogleAuthRequiresOnboarding && response.onboarding_session && response.google_user) {
+          onGoogleAuthRequiresOnboarding(
+            response.onboarding_session.session_id,
+            response.google_user
+          )
+        }
+      } else {
+        // User is logged in
+        if (response.access_token) {
+          storeToken(response.access_token)
+        }
+        if (response.refresh_token) {
+          storeRefreshToken(response.refresh_token)
+        }
+        if (onGoogleAuthSuccess) {
+          onGoogleAuthSuccess()
+        }
+      }
+    } catch (err: any) {
+      console.error('Google authentication error:', err)
+      setGoogleError(err?.message || 'Google authentication failed')
+    } finally {
+      setGoogleLoading(false)
+    }
+  }
+
+  const handleGoogleError = () => {
+    setGoogleError('Google authentication was cancelled or failed')
+    setGoogleLoading(false)
   }
 
   return (
@@ -32,6 +84,20 @@ function LoginForm({ onSubmit, error, isLoading }: LoginFormProps) {
           }}
         >
           {error}
+        </div>
+      )}
+      {googleError && (
+        <div
+          style={{
+            color: '#ff4444',
+            fontSize: '14px',
+            marginBottom: '16px',
+            padding: '12px',
+            backgroundColor: 'rgba(255, 68, 68, 0.1)',
+            borderRadius: '8px',
+          }}
+        >
+          {googleError}
         </div>
       )}
       <div style={{ marginBottom: '16px' }}>
@@ -114,10 +180,54 @@ function LoginForm({ onSubmit, error, isLoading }: LoginFormProps) {
           fontSize: '16px',
           fontWeight: 600,
           transition: 'opacity 0.2s',
+          marginBottom: '16px',
         }}
       >
         {isLoading ? 'Logging in...' : 'Log in'}
       </button>
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '12px',
+          marginTop: '16px',
+          marginBottom: '16px',
+        }}
+      >
+        <div
+          style={{
+            flex: 1,
+            height: '1px',
+            backgroundColor: 'var(--border-color, #262626)',
+          }}
+        />
+        <span
+          style={{
+            color: 'var(--text-secondary, #a8a8a8)',
+            fontSize: '14px',
+          }}
+        >
+          OR
+        </span>
+        <div
+          style={{
+            flex: 1,
+            height: '1px',
+            backgroundColor: 'var(--border-color, #262626)',
+          }}
+        />
+      </div>
+      <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+        <GoogleLogin
+          onSuccess={handleGoogleSuccess}
+          onError={handleGoogleError}
+          useOneTap={false}
+          theme="filled_black"
+          size="large"
+          text="signin_with"
+          shape="rectangular"
+        />
+      </div>
     </form>
   )
 }

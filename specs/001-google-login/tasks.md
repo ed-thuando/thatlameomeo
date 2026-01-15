@@ -24,8 +24,8 @@
 
 **Purpose**: Project initialization, dependency installation, and Google OAuth configuration
 
-- [ ] T001 Install @react-oauth/google package in frontend/package.json
-- [ ] T002 Install google-auth-library package in netlify/functions/package.json
+- [X] T001 Install @react-oauth/google package in frontend/package.json
+- [X] T002 Install google-auth-library package in netlify/functions/package.json
 - [ ] T003 [P] Configure Google OAuth Client ID in environment variables (.env.local and Netlify dashboard)
 - [ ] T004 [P] Set up Google Cloud Console OAuth 2.0 credentials and configure authorized redirect URIs
 
@@ -37,17 +37,17 @@
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T005 Create database migration file migrations/005_add_google_oauth.sql with Google OAuth columns
+- [X] T005 Create database migration file migrations/005_add_google_oauth.sql with Google OAuth columns
 - [ ] T006 Run database migration to add google_id, google_email, refresh_token, refresh_token_expires_at columns to users table
 - [ ] T007 Run database migration to add onboarding_username, onboarding_color, onboarding_expires_at temporary columns to users table
-- [ ] T008 Create database indexes idx_users_google_id and idx_users_google_email in migration file
-- [ ] T009 Update netlify/functions/utils/auth.ts to add refresh token generation function generateRefreshToken()
-- [ ] T010 Update netlify/functions/utils/auth.ts to add refresh token hashing function hashRefreshToken(token: string)
-- [ ] T011 Update netlify/functions/utils/auth.ts to add refresh token verification function verifyRefreshToken(hashedToken: string, plainToken: string)
-- [ ] T012 Update netlify/functions/utils/auth.ts to modify signToken() to accept optional expiresIn parameter (default '1h' for access tokens)
-- [ ] T013 Create netlify/functions/utils/google.ts with Google token verification utilities
-- [ ] T014 [P] Implement verifyGoogleIdToken() function in netlify/functions/utils/google.ts using google-auth-library
-- [ ] T015 [P] Implement extractGoogleUserInfo() function in netlify/functions/utils/google.ts to extract email, name, picture, sub from token
+- [X] T008 Create database indexes idx_users_google_id and idx_users_google_email in migration file
+- [X] T009 Update netlify/functions/utils/auth.ts to add refresh token generation function generateRefreshToken()
+- [X] T010 Update netlify/functions/utils/auth.ts to add refresh token hashing function hashRefreshToken(token: string)
+- [X] T011 Update netlify/functions/utils/auth.ts to add refresh token verification function verifyRefreshToken(hashedToken: string, plainToken: string)
+- [X] T012 Update netlify/functions/utils/auth.ts to modify signToken() to accept optional expiresIn parameter (default '1h' for access tokens)
+- [X] T013 Create netlify/functions/utils/google.ts with Google token verification utilities
+- [X] T014 [P] Implement verifyGoogleIdToken() function in netlify/functions/utils/google.ts using google-auth-library
+- [X] T015 [P] Implement extractGoogleUserInfo() function in netlify/functions/utils/google.ts to extract email, name, picture, sub from token
 
 **Checkpoint**: Foundation ready - user story implementation can now begin in parallel
 
@@ -61,47 +61,47 @@
 
 ### Implementation for User Story 1
 
-- [ ] T016 [US1] Create netlify/functions/google-auth.ts function handler for Google OAuth verification
-- [ ] T017 [US1] Implement POST handler in netlify/functions/google-auth.ts to accept id_token from frontend
-- [ ] T018 [US1] Implement Google ID token verification in netlify/functions/google-auth.ts using verifyGoogleIdToken() utility
-- [ ] T019 [US1] Implement email validation check in netlify/functions/google-auth.ts (return error if no email)
-- [ ] T020 [US1] Implement user lookup by google_id in netlify/functions/google-auth.ts
-- [ ] T021 [US1] Implement user lookup by google_email for account linking in netlify/functions/google-auth.ts
-- [ ] T022 [US1] Implement account linking logic in netlify/functions/google-auth.ts when email matches existing account
-- [ ] T023 [US1] Implement new user detection in netlify/functions/google-auth.ts (create onboarding session)
-- [ ] T024 [US1] Implement refresh token generation and storage for existing users in netlify/functions/google-auth.ts
-- [ ] T025 [US1] Implement access token generation (1 hour expiration) in netlify/functions/google-auth.ts
-- [ ] T026 [US1] Implement response formatting for requires_onboarding: true case in netlify/functions/google-auth.ts
-- [ ] T027 [US1] Implement response formatting for existing user login case in netlify/functions/google-auth.ts
-- [ ] T028 [US1] Implement error handling for invalid tokens, missing email, and server errors in netlify/functions/google-auth.ts
-- [ ] T029 [US1] Create netlify/functions/refresh.ts function handler for token refresh
-- [ ] T030 [US1] Implement POST handler in netlify/functions/refresh.ts to accept refresh_token
-- [ ] T031 [US1] Implement refresh token validation (hash check and expiration) in netlify/functions/refresh.ts
-- [ ] T032 [US1] Implement new access token generation in netlify/functions/refresh.ts
-- [ ] T033 [US1] Implement error handling for invalid/expired refresh tokens in netlify/functions/refresh.ts
-- [ ] T034 [US1] Update frontend/src/services/auth.ts to add googleAuth(idToken: string) function
-- [ ] T035 [US1] Update frontend/src/services/auth.ts to add refreshAccessToken(refreshToken: string) function
-- [ ] T036 [US1] Update frontend/src/services/auth.ts to add storeRefreshToken(token: string) function
-- [ ] T037 [US1] Update frontend/src/services/auth.ts to add getRefreshToken() function
-- [ ] T038 [US1] Update frontend/src/services/api.ts to add automatic token refresh logic before API requests
-- [ ] T039 [US1] Implement token expiration check (check if token expires in < 10 minutes) in frontend/src/services/api.ts
-- [ ] T040 [US1] Implement automatic refresh call when token near expiration in frontend/src/services/api.ts
-- [ ] T041 [US1] Implement error handling for refresh failures (redirect to login) in frontend/src/services/api.ts
-- [ ] T042 [US1] Update frontend/src/App.tsx to wrap app with GoogleOAuthProvider component
-- [ ] T043 [US1] Configure GoogleOAuthProvider with GOOGLE_CLIENT_ID from environment in frontend/src/App.tsx
-- [ ] T044 [US1] Update frontend/src/components/auth/LoginForm.tsx to add Google login button
-- [ ] T045 [US1] Implement useGoogleLogin hook integration in frontend/src/components/auth/LoginForm.tsx
-- [ ] T046 [US1] Implement Google OAuth callback handling in frontend/src/components/auth/LoginForm.tsx
-- [ ] T047 [US1] Implement ID token extraction from Google response in frontend/src/components/auth/LoginForm.tsx
-- [ ] T048 [US1] Implement call to googleAuth service with ID token in frontend/src/components/auth/LoginForm.tsx
-- [ ] T049 [US1] Implement handling of requires_onboarding response in frontend/src/components/auth/LoginForm.tsx
-- [ ] T050 [US1] Implement handling of existing user login response (store tokens, redirect) in frontend/src/components/auth/LoginForm.tsx
-- [ ] T051 [US1] Implement error handling for OAuth failures in frontend/src/components/auth/LoginForm.tsx
-- [ ] T052 [US1] Update frontend/src/hooks/useAuth.ts to handle refresh tokens in validateToken()
-- [ ] T053 [US1] Update frontend/src/hooks/useAuth.ts to add refresh token storage on login
-- [ ] T054 [US1] Update frontend/src/hooks/useAuth.ts logout() to clear refresh token from storage
+- [X] T016 [US1] Create netlify/functions/google-auth.ts function handler for Google OAuth verification
+- [X] T017 [US1] Implement POST handler in netlify/functions/google-auth.ts to accept id_token from frontend
+- [X] T018 [US1] Implement Google ID token verification in netlify/functions/google-auth.ts using verifyGoogleIdToken() utility
+- [X] T019 [US1] Implement email validation check in netlify/functions/google-auth.ts (return error if no email)
+- [X] T020 [US1] Implement user lookup by google_id in netlify/functions/google-auth.ts
+- [X] T021 [US1] Implement user lookup by google_email for account linking in netlify/functions/google-auth.ts
+- [X] T022 [US1] Implement account linking logic in netlify/functions/google-auth.ts when email matches existing account
+- [X] T023 [US1] Implement new user detection in netlify/functions/google-auth.ts (create onboarding session)
+- [X] T024 [US1] Implement refresh token generation and storage for existing users in netlify/functions/google-auth.ts
+- [X] T025 [US1] Implement access token generation (1 hour expiration) in netlify/functions/google-auth.ts
+- [X] T026 [US1] Implement response formatting for requires_onboarding: true case in netlify/functions/google-auth.ts
+- [X] T027 [US1] Implement response formatting for existing user login case in netlify/functions/google-auth.ts
+- [X] T028 [US1] Implement error handling for invalid tokens, missing email, and server errors in netlify/functions/google-auth.ts
+- [X] T029 [US1] Create netlify/functions/refresh.ts function handler for token refresh
+- [X] T030 [US1] Implement POST handler in netlify/functions/refresh.ts to accept refresh_token
+- [X] T031 [US1] Implement refresh token validation (hash check and expiration) in netlify/functions/refresh.ts
+- [X] T032 [US1] Implement new access token generation in netlify/functions/refresh.ts
+- [X] T033 [US1] Implement error handling for invalid/expired refresh tokens in netlify/functions/refresh.ts
+- [X] T034 [US1] Update frontend/src/services/auth.ts to add googleAuth(idToken: string) function
+- [X] T035 [US1] Update frontend/src/services/auth.ts to add refreshAccessToken(refreshToken: string) function
+- [X] T036 [US1] Update frontend/src/services/auth.ts to add storeRefreshToken(token: string) function
+- [X] T037 [US1] Update frontend/src/services/auth.ts to add getRefreshToken() function
+- [X] T038 [US1] Update frontend/src/services/api.ts to add automatic token refresh logic before API requests
+- [X] T039 [US1] Implement token expiration check (check if token expires in < 10 minutes) in frontend/src/services/api.ts
+- [X] T040 [US1] Implement automatic refresh call when token near expiration in frontend/src/services/api.ts
+- [X] T041 [US1] Implement error handling for refresh failures (redirect to login) in frontend/src/services/api.ts
+- [X] T042 [US1] Update frontend/src/App.tsx to wrap app with GoogleOAuthProvider component
+- [X] T043 [US1] Configure GoogleOAuthProvider with GOOGLE_CLIENT_ID from environment in frontend/src/App.tsx
+- [X] T044 [US1] Update frontend/src/components/auth/LoginForm.tsx to add Google login button
+- [X] T045 [US1] Implement useGoogleLogin hook integration in frontend/src/components/auth/LoginForm.tsx
+- [X] T046 [US1] Implement Google OAuth callback handling in frontend/src/components/auth/LoginForm.tsx
+- [X] T047 [US1] Implement ID token extraction from Google response in frontend/src/components/auth/LoginForm.tsx
+- [X] T048 [US1] Implement call to googleAuth service with ID token in frontend/src/components/auth/LoginForm.tsx
+- [X] T049 [US1] Implement handling of requires_onboarding response in frontend/src/components/auth/LoginForm.tsx
+- [X] T050 [US1] Implement handling of existing user login response (store tokens, redirect) in frontend/src/components/auth/LoginForm.tsx
+- [X] T051 [US1] Implement error handling for OAuth failures in frontend/src/components/auth/LoginForm.tsx
+- [X] T052 [US1] Update frontend/src/hooks/useAuth.ts to handle refresh tokens in validateToken()
+- [X] T053 [US1] Update frontend/src/hooks/useAuth.ts to add refresh token storage on login
+- [X] T054 [US1] Update frontend/src/hooks/useAuth.ts logout() to clear refresh token from storage
 - [ ] T055 [US1] Update netlify/functions/users.ts handleUpdateProfile to invalidate refresh token on logout (if logout endpoint exists)
-- [ ] T056 [US1] Update netlify/functions/login.ts to maintain backward compatibility with existing username/password login
+- [X] T056 [US1] Update netlify/functions/login.ts to maintain backward compatibility with existing username/password login
 
 **Checkpoint**: At this point, User Story 1 should be fully functional and testable independently. Users can authenticate with Google, receive tokens, and have tokens automatically refreshed.
 
@@ -115,41 +115,41 @@
 
 ### Implementation for User Story 2
 
-- [ ] T057 [US2] Create netlify/functions/onboarding.ts function handler for onboarding completion
-- [ ] T058 [US2] Implement POST handler in netlify/functions/onboarding.ts to accept session_id, username, avatar_bg_color
-- [ ] T059 [US2] Implement onboarding session validation (check expiration) in netlify/functions/onboarding.ts
-- [ ] T060 [US2] Implement username format validation (1-50 chars, alphanumeric + underscores) in netlify/functions/onboarding.ts
-- [ ] T061 [US2] Implement username availability check (query database) in netlify/functions/onboarding.ts
-- [ ] T062 [US2] Implement avatar color validation (must be from predefined palette) in netlify/functions/onboarding.ts
-- [ ] T063 [US2] Implement user account creation with username and color in netlify/functions/onboarding.ts
-- [ ] T064 [US2] Implement refresh token generation and storage for new user in netlify/functions/onboarding.ts
-- [ ] T065 [US2] Implement access token generation (1 hour expiration) in netlify/functions/onboarding.ts
-- [ ] T066 [US2] Implement onboarding session cleanup (clear temporary columns) in netlify/functions/onboarding.ts
-- [ ] T067 [US2] Implement error handling for username conflicts (409 Conflict) in netlify/functions/onboarding.ts
-- [ ] T068 [US2] Implement error handling for invalid session, expired session, validation errors in netlify/functions/onboarding.ts
-- [ ] T069 [US2] Add GET /users/check-username endpoint handler in netlify/functions/users.ts
-- [ ] T070 [US2] Implement username availability check query in netlify/functions/users.ts check-username handler
-- [ ] T071 [US2] Implement username format validation in netlify/functions/users.ts check-username handler
-- [ ] T072 [US2] Implement response formatting (available: true/false) in netlify/functions/users.ts check-username handler
-- [ ] T073 [US2] Create frontend/src/components/auth/OnboardingScreen.tsx component
-- [ ] T074 [US2] Implement username input field with onBlur handler in frontend/src/components/auth/OnboardingScreen.tsx
-- [ ] T075 [US2] Implement username validation API call on blur in frontend/src/components/auth/OnboardingScreen.tsx
-- [ ] T076 [US2] Implement debouncing for username validation (300-500ms) in frontend/src/components/auth/OnboardingScreen.tsx
-- [ ] T077 [US2] Implement error message display for taken username in frontend/src/components/auth/OnboardingScreen.tsx
-- [ ] T078 [US2] Implement color picker integration (reuse AvatarEditor color palette) in frontend/src/components/auth/OnboardingScreen.tsx
-- [ ] T079 [US2] Implement form submission handler in frontend/src/components/auth/OnboardingScreen.tsx
-- [ ] T080 [US2] Implement call to onboarding completion API in frontend/src/components/auth/OnboardingScreen.tsx
-- [ ] T081 [US2] Implement token storage and user state update on successful onboarding in frontend/src/components/auth/OnboardingScreen.tsx
-- [ ] T082 [US2] Implement redirect to home page after onboarding completion in frontend/src/components/auth/OnboardingScreen.tsx
-- [ ] T083 [US2] Implement error handling for username conflicts and validation errors in frontend/src/components/auth/OnboardingScreen.tsx
-- [ ] T084 [US2] Implement loading states during validation and submission in frontend/src/components/auth/OnboardingScreen.tsx
-- [ ] T085 [US2] Update frontend/src/services/auth.ts to add completeOnboarding(sessionId, username, color) function
-- [ ] T086 [US2] Update frontend/src/services/auth.ts to add checkUsernameAvailability(username) function
-- [ ] T087 [US2] Update frontend/src/pages/LoginPage.tsx to handle navigation to onboarding screen when requires_onboarding is true
-- [ ] T088 [US2] Create route for /onboarding in frontend/src/App.tsx
+- [X] T057 [US2] Create netlify/functions/onboarding.ts function handler for onboarding completion
+- [X] T058 [US2] Implement POST handler in netlify/functions/onboarding.ts to accept session_id, username, avatar_bg_color
+- [X] T059 [US2] Implement onboarding session validation (check expiration) in netlify/functions/onboarding.ts
+- [X] T060 [US2] Implement username format validation (1-50 chars, alphanumeric + underscores) in netlify/functions/onboarding.ts
+- [X] T061 [US2] Implement username availability check (query database) in netlify/functions/onboarding.ts
+- [X] T062 [US2] Implement avatar color validation (must be from predefined palette) in netlify/functions/onboarding.ts
+- [X] T063 [US2] Implement user account creation with username and color in netlify/functions/onboarding.ts
+- [X] T064 [US2] Implement refresh token generation and storage for new user in netlify/functions/onboarding.ts
+- [X] T065 [US2] Implement access token generation (1 hour expiration) in netlify/functions/onboarding.ts
+- [X] T066 [US2] Implement onboarding session cleanup (clear temporary columns) in netlify/functions/onboarding.ts
+- [X] T067 [US2] Implement error handling for username conflicts (409 Conflict) in netlify/functions/onboarding.ts
+- [X] T068 [US2] Implement error handling for invalid session, expired session, validation errors in netlify/functions/onboarding.ts
+- [X] T069 [US2] Add GET /users/check-username endpoint handler in netlify/functions/users.ts
+- [X] T070 [US2] Implement username availability check query in netlify/functions/users.ts check-username handler
+- [X] T071 [US2] Implement username format validation in netlify/functions/users.ts check-username handler
+- [X] T072 [US2] Implement response formatting (available: true/false) in netlify/functions/users.ts check-username handler
+- [X] T073 [US2] Create frontend/src/components/auth/OnboardingScreen.tsx component
+- [X] T074 [US2] Implement username input field with onBlur handler in frontend/src/components/auth/OnboardingScreen.tsx
+- [X] T075 [US2] Implement username validation API call on blur in frontend/src/components/auth/OnboardingScreen.tsx
+- [X] T076 [US2] Implement debouncing for username validation (300-500ms) in frontend/src/components/auth/OnboardingScreen.tsx
+- [X] T077 [US2] Implement error message display for taken username in frontend/src/components/auth/OnboardingScreen.tsx
+- [X] T078 [US2] Implement color picker integration (reuse AvatarEditor color palette) in frontend/src/components/auth/OnboardingScreen.tsx
+- [X] T079 [US2] Implement form submission handler in frontend/src/components/auth/OnboardingScreen.tsx
+- [X] T080 [US2] Implement call to onboarding completion API in frontend/src/components/auth/OnboardingScreen.tsx
+- [X] T081 [US2] Implement token storage and user state update on successful onboarding in frontend/src/components/auth/OnboardingScreen.tsx
+- [X] T082 [US2] Implement redirect to home page after onboarding completion in frontend/src/components/auth/OnboardingScreen.tsx
+- [X] T083 [US2] Implement error handling for username conflicts and validation errors in frontend/src/components/auth/OnboardingScreen.tsx
+- [X] T084 [US2] Implement loading states during validation and submission in frontend/src/components/auth/OnboardingScreen.tsx
+- [X] T085 [US2] Update frontend/src/services/auth.ts to add completeOnboarding(sessionId, username, color) function
+- [X] T086 [US2] Update frontend/src/services/auth.ts to add checkUsernameAvailability(username) function
+- [X] T087 [US2] Update frontend/src/pages/LoginPage.tsx to handle navigation to onboarding screen when requires_onboarding is true
+- [X] T088 [US2] Create route for /onboarding in frontend/src/App.tsx
 - [ ] T089 [US2] Implement onboarding session persistence check on /onboarding route load
-- [ ] T090 [US2] Implement onboarding session resume logic (load saved username/color if session valid) in frontend/src/components/auth/OnboardingScreen.tsx
-- [ ] T091 [US2] Implement onboarding session expiration handling (redirect to login) in frontend/src/components/auth/OnboardingScreen.tsx
+- [X] T090 [US2] Implement onboarding session resume logic (load saved username/color if session valid) in frontend/src/components/auth/OnboardingScreen.tsx
+- [X] T091 [US2] Implement onboarding session expiration handling (redirect to login) in frontend/src/components/auth/OnboardingScreen.tsx
 
 **Checkpoint**: At this point, User Stories 1 AND 2 should both work independently. Users can authenticate with Google, complete onboarding, and access the app.
 

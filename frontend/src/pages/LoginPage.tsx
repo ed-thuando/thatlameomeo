@@ -1,10 +1,12 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { login, storeToken } from '../services/auth'
+import { useAuth } from '../hooks/useAuth'
 import LoginForm from '../components/auth/LoginForm'
 
 function LoginPage() {
   const navigate = useNavigate()
+  const { setUser } = useAuth()
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
 
@@ -15,6 +17,7 @@ function LoginPage() {
     try {
       const response = await login({ username, password })
       storeToken(response.token)
+      setUser(response.user)
       navigate('/')
     } catch (err: unknown) {
       if (err && typeof err === 'object' && 'message' in err) {
@@ -25,6 +28,17 @@ function LoginPage() {
     } finally {
       setIsLoading(false)
     }
+  }
+
+  const handleGoogleAuthSuccess = () => {
+    // User is logged in, navigate to home
+    navigate('/')
+  }
+
+  const handleGoogleAuthRequiresOnboarding = (sessionId: string, googleUser: { email: string; name: string; picture: string }) => {
+    // Navigate to onboarding page
+    // Store session info temporarily (could use state or localStorage)
+    navigate('/onboarding', { state: { sessionId, googleUser } })
   }
 
   return (
@@ -59,7 +73,13 @@ function LoginPage() {
             Thatlameomeo
           </h1>
         </div>
-      <LoginForm onSubmit={handleLogin} error={error} isLoading={isLoading} />
+      <LoginForm
+        onSubmit={handleLogin}
+        onGoogleAuthSuccess={handleGoogleAuthSuccess}
+        onGoogleAuthRequiresOnboarding={handleGoogleAuthRequiresOnboarding}
+        error={error}
+        isLoading={isLoading}
+      />
       </div>
     </div>
   )

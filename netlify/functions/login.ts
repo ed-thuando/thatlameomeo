@@ -84,8 +84,8 @@ export const handler: Handler = async (event) => {
       )
     }
 
-    // Generate JWT token
-    const token = signToken(userId, storedUsername)
+    // Generate JWT token (1 hour expiration for consistency with OAuth tokens)
+    const token = signToken(userId, storedUsername, '1h')
 
     // Close database connection
     closeDbClient()

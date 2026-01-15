@@ -1,4 +1,6 @@
 import jwt from 'jsonwebtoken'
+import bcrypt from 'bcryptjs'
+import crypto from 'crypto'
 
 const getJwtSecret = () => {
   const secret = process.env.JWT_SECRET
@@ -17,17 +19,53 @@ export interface JWTPayload {
  * Sign a JWT token with user information
  * @param userId - User ID to include in token
  * @param username - Username to include in token
+ * @param expiresIn - Token expiration time (default: '1h' for access tokens)
  * @returns JWT token string
  */
-export function signToken(userId: number, username: string): string {
+export function signToken(
+  userId: number,
+  username: string,
+  expiresIn: string = '1h'
+): string {
   const payload: JWTPayload = {
     userId,
     username,
   }
 
   return jwt.sign(payload, getJwtSecret(), {
-    expiresIn: '24h',
+    expiresIn,
   })
+}
+
+/**
+ * Generate a secure random refresh token
+ * @returns Plain text refresh token (must be hashed before storage)
+ */
+export function generateRefreshToken(): string {
+  return crypto.randomBytes(32).toString('hex')
+}
+
+/**
+ * Hash a refresh token using bcrypt
+ * @param token - Plain text refresh token
+ * @returns Hashed token string
+ */
+export async function hashRefreshToken(token: string): Promise<string> {
+  const saltRounds = 10
+  return await bcrypt.hash(token, saltRounds)
+}
+
+/**
+ * Verify a refresh token against its hash
+ * @param hashedToken - Hashed token from database
+ * @param plainToken - Plain text token from client
+ * @returns True if tokens match, false otherwise
+ */
+export async function verifyRefreshToken(
+  hashedToken: string,
+  plainToken: string
+): Promise<boolean> {
+  return await bcrypt.compare(plainToken, hashedToken)
 }
 
 /**

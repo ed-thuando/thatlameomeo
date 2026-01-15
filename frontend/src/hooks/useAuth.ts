@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { getToken, decodeToken, isTokenExpired, removeToken } from '../utils/jwt'
+import { getRefreshToken, removeRefreshToken } from '../services/auth'
 
 export interface AuthUser {
   id: number
@@ -90,6 +91,7 @@ export function useAuth() {
    */
   const logout = () => {
     removeToken()
+    removeRefreshToken()
     setAuthState({
       user: null,
       isAuthenticated: false,
