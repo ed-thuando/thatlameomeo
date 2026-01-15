@@ -1,11 +1,9 @@
 <!--
 Sync Impact Report:
-Version change: 1.1.0 → 1.2.0 (Minor: Added Flutter mobile support and multi-platform backend guidance)
-Modified principles:
-  - II. Netlify Functions API Design → Enhanced to emphasize multi-platform support
+Version change: 1.2.0 → 1.3.0 (Minor: Added coding quality and style standards)
+Modified principles: N/A
 Added sections:
-  - VII. Multi-Platform Backend Design (new principle)
-  - Flutter mobile platform in Technology Stack
+  - VIII. Coding Quality & Style Standards (new principle)
 Removed sections: N/A
 Templates requiring updates:
   ✅ plan-template.md - Constitution Check section compatible (no changes needed)
@@ -39,6 +37,9 @@ All theme colors, spacing, and styling values MUST be defined as CSS variables i
 
 ### VII. Multi-Platform Backend Design
 Backend API endpoints MUST be designed to serve all app variants (web React app, Flutter mobile app, and future platforms) without modification. API responses MUST use standard JSON format with consistent structure across all endpoints. Authentication mechanisms (JWT tokens) MUST work identically for all client platforms. Business logic MUST remain in backend functions, never duplicated in client-specific code. When adding new features, API contracts MUST be validated to ensure compatibility with existing web and planned mobile implementations. Platform-specific optimizations MUST be handled at the client level, not in backend functions.
+
+### VIII. Coding Quality & Style Standards
+All code MUST adhere to SOLID principles, clean code practices, and maintainability standards. Functions and methods MUST have a single responsibility and do one thing well. Functions MUST be small, focused, and avoid side effects where possible. Code MUST be self-documenting through clear naming conventions—use descriptive names for variables, functions, and classes that express intent. Magic numbers and strings MUST be extracted to named constants or configuration. Complex logic MUST be broken down into smaller, testable functions. Code duplication MUST be eliminated through abstraction, composition, or shared utilities. Error handling MUST be explicit and meaningful—never swallow errors silently. TypeScript types MUST be used consistently—avoid `any` type unless absolutely necessary and document the rationale. Comments MUST explain "why" not "what"—code should be self-explanatory. Functions MUST have clear input/output contracts with proper type definitions. Classes and components MUST follow the Single Responsibility Principle—each class/component should have one reason to change. Dependencies MUST be injected rather than hardcoded to enable testability and flexibility. Abstractions MUST be at the right level—not too abstract (over-engineering) nor too concrete (tight coupling). Code MUST be organized logically with related functionality grouped together. Dead code, unused imports, and commented-out code MUST be removed before merge. Performance-critical code paths MUST be optimized, but premature optimization MUST be avoided. All public APIs (functions, components, classes) MUST have clear documentation comments (JSDoc/TSDoc) explaining purpose, parameters, return values, and usage examples. Code complexity MUST be managed—cyclomatic complexity should be kept low, and deeply nested conditionals MUST be refactored. Immutability MUST be preferred where possible—avoid mutating objects/arrays directly, use immutable patterns. Async operations MUST be handled properly with error handling and loading states. Code MUST be formatted consistently using Prettier and follow ESLint rules without exceptions.
 
 ## Technology Stack
 
@@ -74,4 +75,4 @@ This constitution supersedes all other development practices. Amendments require
 
 All PRs and code reviews MUST verify compliance with constitution principles. Complexity beyond these principles MUST be justified with clear rationale. Use `.specify/templates/` for feature planning and implementation guidance.
 
-**Version**: 1.2.0 | **Ratified**: 2025-01-27 | **Last Amended**: 2026-01-15
+**Version**: 1.3.0 | **Ratified**: 2025-01-27 | **Last Amended**: 2026-01-15
