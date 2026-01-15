@@ -3,6 +3,8 @@
 Auto-generated from all feature plans. Last updated: 2026-01-14
 
 ## Active Technologies
+- TypeScript 5.x, Node.js 18+ (for Netlify Functions), React 18+ + React, Vite, @libsql/client (Turso), jsonwebtoken, google-auth-library (for token verification), @react-oauth/google (frontend OAuth), Netlify Functions (001-google-login)
+- Turso (cloud SQLite) - existing database with new columns: `google_id`, `google_email`, `refresh_token`, `refresh_token_expires_at` (001-google-login)
 
 - TypeScript 5.x, Node.js 18+ (for Netlify Functions), React 18+ + React, Vite, @libsql/client (Turso), jsonwebtoken, Netlify Functions (001-meomeo-stories)
 
@@ -22,6 +24,7 @@ npm test && npm run lint
 TypeScript 5.x, Node.js 18+ (for Netlify Functions), React 18+: Follow standard conventions
 
 ## Recent Changes
+- 001-google-login: Added TypeScript 5.x, Node.js 18+ (for Netlify Functions), React 18+ + React, Vite, @libsql/client (Turso), jsonwebtoken, google-auth-library (for token verification), @react-oauth/google (frontend OAuth), Netlify Functions
 
 - 001-meomeo-stories: Added TypeScript 5.x, Node.js 18+ (for Netlify Functions), React 18+ + React, Vite, @libsql/client (Turso), jsonwebtoken, Netlify Functions
 
